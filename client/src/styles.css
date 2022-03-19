@@ -1,0 +1,33 @@
+.square {
+ border-radius: 0px;
+}
+
+.jumbotron {
+ background-image: linear-gradient(to right, #007bff, #000);
+ color: #fff
+}
+
+.pointer {
+ cursor: pointer
+}
+
+.grid {
+ list-style: none;
+ padding: 0;
+ margin-left: 0;
+}
+
+.video-responsive {
+ overflow: hidden;
+ padding-bottom: 56.25%;
+ position: relative;
+ height: 0;
+}
+
+.video-responsive iframe {
+ left: 0;
+ top: 0;
+ height: 100%;
+ width: 100%;
+ position: absolute;
+}
