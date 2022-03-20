@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
-import CourseRoute from '../components/routes/CourseRoute'
-import CourseCard from '../components/cards/CourseCard'
+import CourseRoute from '../../components/routes/CourseRoute'
+import CourseCard from '../../components/cards/CourseCard'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
-import { listCourses } from '../actions/courseActions'
+import { listCourses } from '../../../actions/courseActions'
 
 const Courses = (/*{ courses }*/) => {
   const dispatch = useDispatch()

@@ -5,7 +5,7 @@ import Home from './pages/home/home'
 import Login from './pages/user/login/login'
 import Profile from './pages/user/profile'
 //import { AuthContext } from './context/AuthContext';
-import Courses from './pages/courselist'
+import Courses from './pages/course/courselist'
 import Course from './pages/course/Course'
 import { useDispatch, useSelector } from 'react-redux'
 import TopNav from './components/nav/TopNav'
