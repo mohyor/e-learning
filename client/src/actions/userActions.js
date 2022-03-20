@@ -61,7 +61,7 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
   dispatch({ type: USER_UPDATE_PROFILE_REQUEST })
   const { userLogin: { userInfo } } = getState() 
   const config = { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${userInfo.token}` } }
-  const res = await axios.put(`/api/user/${id}`, config)
+  const res = await axios.put(`/api/user/${id}`,user, config)
   
   dispatch({ type: USER_UPDATE_PROFILE_SUCCESS, payload: res.data })
  } catch (error) { 

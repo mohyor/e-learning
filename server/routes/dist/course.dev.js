@@ -8,8 +8,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var express = require('express');
 
-var slugify = require('slugify'); //import { readFileSync } from 'fs'
-
+var slugify = require('slugify');
 
 var router = express.Router();
 
@@ -25,8 +24,7 @@ var Course = require('../models/course');
 var User = require('../models/user');
 
 router.param('userId', userById);
-router.param("courseId", courseById); // Routes concerned with the user model
-// Create Course
+router.param("courseId", courseById); // Create Course
 
 router.post('/course/:userId', isAuth, isInstructor, function _callee(req, res) {
   var alreadyExist, course;
@@ -117,21 +115,52 @@ router.put('/course/:slug', isAuth, function _callee2(req, res) {
       }
     }
   }, null, null, [[0, 11]]);
-}); // Course Enrollment
+}); // Read Course
 
-router.put('/free-enrollment/:userId', isAuth, function _callee3(req, res) {
-  var course, studentCourse;
+router.get('/course/:slug', function _callee3(req, res) {
+  var course;
   return regeneratorRuntime.async(function _callee3$(_context3) {
     while (1) {
       switch (_context3.prev = _context3.next) {
         case 0:
           _context3.prev = 0;
           _context3.next = 3;
-          return regeneratorRuntime.awrap(Course.findById(req.params.courseId).exec());
+          return regeneratorRuntime.awrap(Course.findOne({
+            slug: req.params.slug
+          }).populate('instructor', '_id name').exec());
 
         case 3:
           course = _context3.sent;
-          _context3.next = 6;
+          res.json(course);
+          _context3.next = 10;
+          break;
+
+        case 7:
+          _context3.prev = 7;
+          _context3.t0 = _context3["catch"](0);
+          console.log(_context3.t0);
+
+        case 10:
+        case "end":
+          return _context3.stop();
+      }
+    }
+  }, null, null, [[0, 7]]);
+}); // Course Enrollment
+
+router.put('/free-enrollment/:userId', isAuth, function _callee4(req, res) {
+  var course, studentCourse;
+  return regeneratorRuntime.async(function _callee4$(_context4) {
+    while (1) {
+      switch (_context4.prev = _context4.next) {
+        case 0:
+          _context4.prev = 0;
+          _context4.next = 3;
+          return regeneratorRuntime.awrap(Course.findById(req.params.courseId).exec());
+
+        case 3:
+          course = _context4.sent;
+          _context4.next = 6;
           return regeneratorRuntime.awrap(User.findByIdAndUpdate(req.params.userId, {
             $addToSet: {
               courses: req.body.courseId
@@ -141,43 +170,43 @@ router.put('/free-enrollment/:userId', isAuth, function _callee3(req, res) {
           }).exec());
 
         case 6:
-          studentCourse = _context3.sent;
+          studentCourse = _context4.sent;
           //const enrolledStudents = await Course.findByIdAndUpdate(req.params.courseId, { $addToSet: { students: req.body.userId }, }, { new: true }).exec
           res.json({
             message: 'Congratulations! You have successfully enrolled',
             studentCourse: studentCourse
           });
-          _context3.next = 14;
+          _context4.next = 14;
           break;
 
         case 10:
-          _context3.prev = 10;
-          _context3.t0 = _context3["catch"](0);
-          console.log('free enrollment err', _context3.t0);
-          return _context3.abrupt("return", res.status(400).send('Enrollment create failed'));
+          _context4.prev = 10;
+          _context4.t0 = _context4["catch"](0);
+          console.log('free enrollment err', _context4.t0);
+          return _context4.abrupt("return", res.status(400).send('Enrollment create failed'));
 
         case 14:
         case "end":
-          return _context3.stop();
+          return _context4.stop();
       }
     }
   }, null, null, [[0, 10]]);
 }); //router.get('/user/course/:slug', requireSignin, isEnrolled, read)
 // User Courses - I need to fix this code.
 
-router.get('/user-courses/:userId', isAuth, function _callee4(req, res) {
+router.get('/user-courses/:userId', isAuth, function _callee5(req, res) {
   var user, courses;
-  return regeneratorRuntime.async(function _callee4$(_context4) {
+  return regeneratorRuntime.async(function _callee5$(_context5) {
     while (1) {
-      switch (_context4.prev = _context4.next) {
+      switch (_context5.prev = _context5.next) {
         case 0:
-          _context4.prev = 0;
-          _context4.next = 3;
+          _context5.prev = 0;
+          _context5.next = 3;
           return regeneratorRuntime.awrap(User.findById(req.params.userId));
 
         case 3:
-          user = _context4.sent;
-          _context4.next = 6;
+          user = _context5.sent;
+          _context5.next = 6;
           return regeneratorRuntime.awrap(Course.find({
             userId: {
               $in: user.courses
@@ -185,54 +214,22 @@ router.get('/user-courses/:userId', isAuth, function _callee4(req, res) {
           }).populate('instructor', '_id name').exec());
 
         case 6:
-          courses = _context4.sent;
+          courses = _context5.sent;
           res.status(200).json(courses);
-          _context4.next = 13;
+          _context5.next = 13;
           break;
 
         case 10:
-          _context4.prev = 10;
-          _context4.t0 = _context4["catch"](0);
-          res.status(500).json(_context4.t0);
+          _context5.prev = 10;
+          _context5.t0 = _context5["catch"](0);
+          res.status(500).json(_context5.t0);
 
         case 13:
-        case "end":
-          return _context4.stop();
-      }
-    }
-  }, null, null, [[0, 10]]);
-}); // Routes concerned with the course model.
-// Read Course
-
-router.get('/course/:slug', function _callee5(req, res) {
-  var course;
-  return regeneratorRuntime.async(function _callee5$(_context5) {
-    while (1) {
-      switch (_context5.prev = _context5.next) {
-        case 0:
-          _context5.prev = 0;
-          _context5.next = 3;
-          return regeneratorRuntime.awrap(Course.findOne({
-            slug: req.params.slug
-          }).populate('instructor', '_id name').exec());
-
-        case 3:
-          course = _context5.sent;
-          res.json(course);
-          _context5.next = 10;
-          break;
-
-        case 7:
-          _context5.prev = 7;
-          _context5.t0 = _context5["catch"](0);
-          console.log(_context5.t0);
-
-        case 10:
         case "end":
           return _context5.stop();
       }
     }
-  }, null, null, [[0, 7]]);
+  }, null, null, [[0, 10]]);
 }); // Courses List
 
 router.get('/courses', function _callee6(req, res) {
@@ -256,7 +253,7 @@ router.get('/courses', function _callee6(req, res) {
       }
     }
   });
-}); // Add a student to the Course Document.
+}); // Add a student to the Course Document. - Not Working
 
 router.put('/enrolling/:courseId', isAuth, function _callee7(req, res) {
   var course;
@@ -316,76 +313,171 @@ router.get('/enrolled-students/:courseId', isAuth, function _callee8(req, res) {
       }
     }
   });
-}); // Not Working
+}); // Create New Review 
 
-router.put('/course/:courseId/review', isAuth, function _callee9(req, res) {
-  var _req$body, rating, comment, course, review;
+router.put('/course/:courseId/review', isAuth, function _callee9(req, res, next) {
+  var _req$body, rating, comment, courseId, review, course, isReviewed, avg;
 
   return regeneratorRuntime.async(function _callee9$(_context9) {
     while (1) {
       switch (_context9.prev = _context9.next) {
         case 0:
-          _req$body = req.body, rating = _req$body.rating, comment = _req$body.comment;
-          _context9.next = 3;
-          return regeneratorRuntime.awrap(Course.findById(req.params.id));
-
-        case 3:
-          course = _context9.sent;
-          _context9.prev = 4;
+          _req$body = req.body, rating = _req$body.rating, comment = _req$body.comment, courseId = _req$body.courseId;
           review = {
-            /*name: req.profile.name,*/
+            user: req.user._id,
+            name: req.user.name,
             rating: Number(rating),
-            comment: comment,
-            user: req.user._id
+            comment: comment
           };
-          course.reviews.push(review);
-          course.numReviews = course.reviews.length; //const enrolledStudents = await Course.findByIdAndUpdate(req.params.courseId, { $addToSet: { students: req.body.userId }, }, { new: true }).exec
+          _context9.next = 4;
+          return regeneratorRuntime.awrap(Course.findById(courseId));
 
-          course.rating = course.reviews.reduce(function (acc, item) {
-            return item.rating + acc;
-          }, 0) / course.reviews.length; //course.reviews.push(review)
-
-          _context9.next = 11;
-          return regeneratorRuntime.awrap(course.save());
-
-        case 11:
-          res.status(201).json({
-            message: 'Review added'
+        case 4:
+          course = _context9.sent;
+          isReviewed = course.reviews.find(function (rev) {
+            return rev.user.toString() === req.user._id.toString();
           });
-          _context9.next = 17;
-          break;
 
-        case 14:
-          _context9.prev = 14;
-          _context9.t0 = _context9["catch"](4);
-          console.log(_context9.t0);
+          if (isReviewed) {
+            course.reviews.forEach(function (rev) {
+              if (rev.user.toString() === req.user._id.toString()) rev.rating = rating, rev.comment = comment;
+            });
+          } else {
+            course.reviews.push(review);
+            course.numOfReviews = course.reviews.length;
+          }
 
-        case 17:
+          avg = 0;
+          course.reviews.forEach(function (rev) {
+            avg += rev.rating;
+          });
+          course.ratings = avg / course.reviews.length;
+          _context9.next = 12;
+          return regeneratorRuntime.awrap(course.save({
+            validateBeforeSave: false
+          }));
+
+        case 12:
+          res.status(200).json(course);
+
+        case 13:
         case "end":
           return _context9.stop();
       }
     }
-  }, null, null, [[4, 14]]);
+  });
+}); // Get All Reviews of a Course 
+
+router.get('/course/:slug/reviews', isAuth, function _callee10(req, res, next) {
+  var course;
+  return regeneratorRuntime.async(function _callee10$(_context10) {
+    while (1) {
+      switch (_context10.prev = _context10.next) {
+        case 0:
+          _context10.prev = 0;
+          _context10.next = 3;
+          return regeneratorRuntime.awrap(Course.findOne({
+            slug: req.params.slug
+          }));
+
+        case 3:
+          course = _context10.sent;
+
+          if (course) {
+            _context10.next = 6;
+            break;
+          }
+
+          return _context10.abrupt("return", res.json({
+            message: "Course not found"
+          }));
+
+        case 6:
+          res.status(200).json({
+            success: true,
+            reviews: course.reviews
+          });
+          _context10.next = 12;
+          break;
+
+        case 9:
+          _context10.prev = 9;
+          _context10.t0 = _context10["catch"](0);
+          console.log(_context10.t0);
+
+        case 12:
+        case "end":
+          return _context10.stop();
+      }
+    }
+  }, null, null, [[0, 9]]);
+}); // Delete Review
+
+router["delete"]('/course/:courseId/review', isAuth, function _callee11(req, res, next) {
+  var course, reviews, avg, ratings, numOfReviews;
+  return regeneratorRuntime.async(function _callee11$(_context11) {
+    while (1) {
+      switch (_context11.prev = _context11.next) {
+        case 0:
+          _context11.next = 2;
+          return regeneratorRuntime.awrap(Course.findById(req.query.courseId));
+
+        case 2:
+          course = _context11.sent;
+
+          if (course) {
+            _context11.next = 5;
+            break;
+          }
+
+          return _context11.abrupt("return", res.json({
+            message: "Course not found"
+          }));
+
+        case 5:
+          reviews = course.reviews.filter(function (rev) {
+            return rev._id.toString() !== req.query.id.toString();
+          });
+          avg = 0;
+          reviews.forEach(function (rev) {
+            avg += rev.rating;
+          });
+          ratings = 0;
+
+          if (reviews.length === 0) {
+            ratings = 0;
+          } else {
+            ratings = avg / reviews.length;
+          }
+
+          numOfReviews = reviews.length;
+          _context11.next = 13;
+          return regeneratorRuntime.awrap(Course.findByIdAndUpdate(req.query.courseId, {
+            reviews: reviews,
+            ratings: ratings,
+            numOfReviews: numOfReviews
+          }, {
+            "new": true,
+            runValidators: true,
+            useFindAndModify: false
+          }));
+
+        case 13:
+          res.status(200).json({
+            success: true,
+            message: "Course successfully deleted."
+          });
+
+        case 14:
+        case "end":
+          return _context11.stop();
+      }
+    }
+  });
 });
 module.exports = router; ///////////
 
 /*
-  const courseId = req.params.id;
-  const course = await Course.findById(courseId);
-
-  if (course) {
-    if (course.reviews.find((x) => x.name === req.user.name)) {
-      return res.status(400).send({ message: 'You already submitted a review' });
-    }
-    const review = { name: req.user.name, rating: Number(req.body.rating), comment: req.body.comment, };
-
-    course.reviews.push(review);
-    course.numReviews = course.reviews.length;
-    course.rating = course.reviews.reduce((a, c) => c.rating + a, 0) / course.reviews.length;
-
-    const updatedCourse = await course.save();
-    res.status(201).send({ message: 'Review Created', review: updatedCourse.reviews[updatedCourse.reviews.length - 1], });
-  }
   
 router.put('/course/publish/:courseId', requireSignin, async (req, res) => {
  try {

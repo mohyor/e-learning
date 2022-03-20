@@ -22,7 +22,8 @@ var reducer = (0, _redux.combineReducers)({
   courseDetails: _courseReducers.courseDetailsReducer,
   userLogin: _userReducers.userLoginReducer,
   userRegister: _userReducers.userRegisterReducer,
-  userDetails: _userReducers.userDetailsReducer
+  userDetails: _userReducers.userDetailsReducer,
+  userUpdateProfile: _userReducers.userUpdateProfileReducer
 });
 var userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null;
 var initialState = {

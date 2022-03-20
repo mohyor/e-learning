@@ -11,9 +11,32 @@ import { getUserDetails, updateUserProfile } from '../../actions/userActions'
 
 const Profile = ({ match }) => {
   const [courses, setCourses] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [loadingProfile, setLoadingProfile] = useState(false)
+  /*
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [message, setMessage] = useState(null)
+
+  const dispatch = useDispatch()
+
+  const userDetails = useSelector((state) => state.userDetails)
+  const { loading, error, user } = userDetails
+
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo } = userLogin
+
+  const userUpdateProfile = useSelector((state) => state.userUpdateProfile)
+  const { success } = userUpdateProfile
+  */
 
   //const { user } = useContext(AuthContext)
+
+  const dispatch = useDispatch()
+
+  const userDetails = useSelector((state) => state.userDetails)
+  const { loading, error, user } = userDetails
    
   useEffect(() => {
     const loadCourses = async () => {
@@ -29,7 +52,7 @@ const Profile = ({ match }) => {
   
   return (
     <UserRoute>
-      {loading && (<SyncOutlined spin className="d-flex justify-content-center display-1 text-danger p-5" />)}
+      {loadingProfile && (<SyncOutlined spin className="d-flex justify-content-center display-1 text-danger p-5" />)}
       <h1 className='jumbotron text-center square'>User Dashboard</h1>
       {courses && courses.map(course => (
         <div key={course._id} className="media pt-2 pb-1"><Avatar size={80} shape="square" src={course.image ? course.image.Location : '/course.png'} />

@@ -199,7 +199,7 @@ var updateUserProfile = function updateUserProfile(user) {
               }
             };
             _context4.next = 6;
-            return regeneratorRuntime.awrap(_axios["default"].put("/api/user/".concat(id), config));
+            return regeneratorRuntime.awrap(_axios["default"].put("/api/user/".concat(id), user, config));
 
           case 6:
             res = _context4.sent;

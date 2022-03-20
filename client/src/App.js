@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import { useContext } from "react"
 import Register from './pages/user/register/register'
-import Home from './pages/home'
+import Home from './pages/home/home'
 import Login from './pages/user/login/login'
 import Profile from './pages/user/profile'
 //import { AuthContext } from './context/AuthContext';
@@ -13,6 +13,8 @@ import 'antd/dist/antd.css'
 import "./styles.css"
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import Categories from "./components/nav/Categories/Categories";
+import Banner from "./pages/home/Banner/Banner";
 
 function App() {
   //const { user } = useContext(AuthContext)
@@ -28,6 +30,8 @@ function App() {
       <Switch>
         <Route exact path='/'>
           {userInfo ? <Home /> : <Register />}
+          <Categories />
+          <Banner />
         </Route>
         <Route path="/login">
           {!userInfo ? <Redirect to="/" /> : <Login />}

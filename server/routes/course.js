@@ -1,6 +1,5 @@
 const express = require('express')
 const slugify = require('slugify')
-//import { readFileSync } from 'fs'
 const router = express.Router()
 
 const {  isInstructor, isEnrolled, isAuth, userById, courseById } = require('../middleware')
@@ -11,7 +10,6 @@ const User = require('../models/user')
 router.param('userId', userById)
 router.param("courseId", courseById)
 
-// Routes concerned with the user model
 // Create Course
 router.post('/course/:userId', isAuth, isInstructor, async(req, res) => {
  try { 
@@ -36,6 +34,16 @@ router.put('/course/:slug', isAuth, async (req, res) => {
  } catch(err) { console.log("Course Update Failed", err); return res.status(400).send(err.message)}
 })
 
+// Read Course
+router.get('/course/:slug', async(req, res) => {
+ try {
+  const course = await Course.findOne({ slug: req.params.slug })
+   .populate('instructor', '_id name')
+   .exec()
+   res.json(course)
+ } catch(err) { console.log(err)}
+})
+
 // Course Enrollment
 router.put('/free-enrollment/:userId', isAuth, async (req, res) => {
   try {
@@ -58,17 +66,6 @@ router.get('/user-courses/:userId', isAuth, async (req, res) => {
     .exec()
    res.status(200).json(courses)
   } catch (err) { res.status(500).json(err)} 
- })
-
-// Routes concerned with the course model.
-// Read Course
-router.get('/course/:slug', async(req, res) => {
- try {
-  const course = await Course.findOne({ slug: req.params.slug })
-   .populate('instructor', '_id name')
-   .exec()
-   res.json(course)
- } catch(err) { console.log(err)}
 })
 
 // Courses List
@@ -79,7 +76,7 @@ router.get('/courses', async (req, res) => {
  res.json(all)
 }) 
 
-// Add a student to the Course Document.
+// Add a student to the Course Document. - Not Working
 router.put('/enrolling/:courseId', isAuth, async(req, res) => {
   const course = await Course.findById(req.params.courseId).exec()
 })
@@ -97,43 +94,79 @@ router.get('/enrolled-students/:courseId', isAuth, async (req, res) => {
  res.json({ status: ids.includes(courseId), course: await Course.findById(courseId).exec(),})
 })
 
-// Not Working
-router.put('/course/:courseId/review', isAuth, async (req, res) => {
- const { rating, comment } = req.body
- const course = await Course.findById(req.params.id)
+// Create New Review 
+router.put('/course/:courseId/review', isAuth, async (req, res, next) => {
+  const { rating, comment, courseId } = req.body;
 
- try {
-  const review = { /*name: req.profile.name,*/ rating: Number(rating), comment, user: req.user._id, }
-  course.reviews.push(review)
-  course.numReviews = course.reviews.length
-  //const enrolledStudents = await Course.findByIdAndUpdate(req.params.courseId, { $addToSet: { students: req.body.userId }, }, { new: true }).exec
-  course.rating = course.reviews.reduce((acc, item) => item.rating + acc, 0) / course.reviews.length
-  //course.reviews.push(review)
-  await course.save()
-  res.status(201).json({ message: 'Review added' })
- } catch (err) { console.log(err)} 
-})
+  const review = { user: req.user._id, name: req.user.name, rating: Number(rating), comment, };
+  const course = await Course.findById(courseId);
+
+  const isReviewed = course.reviews.find((rev) => rev.user.toString() === req.user._id.toString());
+
+  if (isReviewed) {
+    course.reviews.forEach((rev) => {
+      if (rev.user.toString() === req.user._id.toString())
+        (rev.rating = rating), (rev.comment = comment);
+    });
+  } else {
+    course.reviews.push(review);
+    course.numOfReviews = course.reviews.length;
+  }
+
+  let avg = 0;
+  course.reviews.forEach((rev) => { avg += rev.rating; });
+  course.ratings = avg / course.reviews.length;
+
+  await course.save({ validateBeforeSave: false });
+  res.status(200).json(course);
+});
+
+// Get All Reviews of a Course 
+router.get('/course/:slug/reviews', isAuth, async (req, res, next) => {
+  try {
+    const course = await Course.findOne({ slug: req.params.slug })
+    
+    if (!course) { return res.json({ message: "Course not found" }); }
+    res.status(200).json({ success: true, reviews: course.reviews, });
+  } catch (err) { console.log(err)}  
+});
+
+// Delete Review
+router.delete('/course/:courseId/review', isAuth, async (req, res, next) => {
+  const course = await Course.findById(req.query.courseId);
+
+  if (!course) { return res.json({ message: "Course not found" }); }
+  const reviews = course.reviews.filter(
+    (rev) => rev._id.toString() !== req.query.id.toString()
+  );
+
+  let avg = 0;
+
+  reviews.forEach((rev) => { avg += rev.rating; });
+
+  let ratings = 0;
+
+  if (reviews.length === 0) {
+    ratings = 0;
+  } else {
+    ratings = avg / reviews.length;
+  }
+
+  const numOfReviews = reviews.length;
+
+  await Course.findByIdAndUpdate(
+    req.query.courseId,
+    { reviews, ratings, numOfReviews, },
+    { new: true, runValidators: true, useFindAndModify: false, }
+  );
+
+  res.status(200).json({ success: true, message: "Course successfully deleted." });
+});
 
 module.exports = router
 
 ///////////
 /*
-  const courseId = req.params.id;
-  const course = await Course.findById(courseId);
-
-  if (course) {
-    if (course.reviews.find((x) => x.name === req.user.name)) {
-      return res.status(400).send({ message: 'You already submitted a review' });
-    }
-    const review = { name: req.user.name, rating: Number(req.body.rating), comment: req.body.comment, };
-
-    course.reviews.push(review);
-    course.numReviews = course.reviews.length;
-    course.rating = course.reviews.reduce((a, c) => c.rating + a, 0) / course.reviews.length;
-
-    const updatedCourse = await course.save();
-    res.status(201).send({ message: 'Review Created', review: updatedCourse.reviews[updatedCourse.reviews.length - 1], });
-  }
   
 router.put('/course/publish/:courseId', requireSignin, async (req, res) => {
  try {
