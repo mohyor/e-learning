@@ -1,0 +1,58 @@
+.heading_box {
+ display: flex;
+ justify-content: space-around;
+ background-color: #505763;
+ background: linear-gradient(#29303B,#29303B,#29303B);
+ padding: 50px 100px;
+ color: #fff;
+ min-width: 780px;
+}
+
+.index-card-ratting-feed {
+ display: flex;
+ font-size: 15px;
+ font-weight: 600;
+ color: #ffffff;
+ padding-bottom: 5px;
+ margin-left: -10px;
+}
+
+.index-rating-span {
+ margin: 5px;
+}
+
+.course-feed-img-box {
+ background-color: #fff;
+ box-shadow: 0 0 1px 1px rgba(20,23,28,.1), 0 3px 1px 0 rgba(20,23,28,.1);
+ border-radius: 4px;
+ color: #505763;
+ padding: 15px;
+ font-weight: 650;
+ font-family: inherit;
+ font-size: 32px;
+ margin-left: 10px;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+}
+
+.back-home-button {
+ font-family: inherit;
+ color: #fff;
+ background-color: #ec5252;
+ border: 1px solid transparent;
+ display: inline-block;
+ margin: 25px 0px 18px 0px;
+ text-align: center;
+ vertical-align: middle;
+ touch-action: manipulation;
+ cursor: pointer;
+ background-image: none;
+ white-space: nowrap;
+ padding: 12px 11px;
+ font-size: 15px;
+ line-height: 1.35135;
+ border-radius: 2px;
+ width: 90%;
+ outline: none;
+}

@@ -156,7 +156,9 @@ router.put('/free-enrollment/:userId', isAuth, function _callee4(req, res) {
         case 0:
           _context4.prev = 0;
           _context4.next = 3;
-          return regeneratorRuntime.awrap(Course.findById(req.params.courseId).exec());
+          return regeneratorRuntime.awrap(Course.findOne({
+            slug: req.params.slug
+          }));
 
         case 3:
           course = _context4.sent;
@@ -171,10 +173,11 @@ router.put('/free-enrollment/:userId', isAuth, function _callee4(req, res) {
 
         case 6:
           studentCourse = _context4.sent;
-          //const enrolledStudents = await Course.findByIdAndUpdate(req.params.courseId, { $addToSet: { students: req.body.userId }, }, { new: true }).exec
           res.json({
             message: 'Congratulations! You have successfully enrolled',
             studentCourse: studentCourse
+            /*enrolledStudents*/
+
           });
           _context4.next = 14;
           break;
@@ -192,10 +195,10 @@ router.put('/free-enrollment/:userId', isAuth, function _callee4(req, res) {
     }
   }, null, null, [[0, 10]]);
 }); //router.get('/user/course/:slug', requireSignin, isEnrolled, read)
-// User Courses - I need to fix this code.
+// User Courses - I need to update the course params.
 
 router.get('/user-courses/:userId', isAuth, function _callee5(req, res) {
-  var user, courses;
+  var user;
   return regeneratorRuntime.async(function _callee5$(_context5) {
     while (1) {
       switch (_context5.prev = _context5.next) {
@@ -206,30 +209,21 @@ router.get('/user-courses/:userId', isAuth, function _callee5(req, res) {
 
         case 3:
           user = _context5.sent;
-          _context5.next = 6;
-          return regeneratorRuntime.awrap(Course.find({
-            userId: {
-              $in: user.courses
-            }
-          }).populate('instructor', '_id name').exec());
-
-        case 6:
-          courses = _context5.sent;
-          res.status(200).json(courses);
-          _context5.next = 13;
+          res.status(200).json(user.courses);
+          _context5.next = 10;
           break;
 
-        case 10:
-          _context5.prev = 10;
+        case 7:
+          _context5.prev = 7;
           _context5.t0 = _context5["catch"](0);
           res.status(500).json(_context5.t0);
 
-        case 13:
+        case 10:
         case "end":
           return _context5.stop();
       }
     }
-  }, null, null, [[0, 10]]);
+  }, null, null, [[0, 7]]);
 }); // Courses List
 
 router.get('/courses', function _callee6(req, res) {
@@ -256,18 +250,30 @@ router.get('/courses', function _callee6(req, res) {
 }); // Add a student to the Course Document. - Not Working
 
 router.put('/enrolling/:courseId', isAuth, function _callee7(req, res) {
-  var course;
+  var enrollingStudent;
   return regeneratorRuntime.async(function _callee7$(_context7) {
     while (1) {
       switch (_context7.prev = _context7.next) {
         case 0:
           _context7.next = 2;
-          return regeneratorRuntime.awrap(Course.findById(req.params.courseId).exec());
+          return regeneratorRuntime.awrap(Course.findOneAndUpdate({
+            slug: req.params.slug
+          }, {
+            $addToSet: {
+              students: req.body.userId
+            }
+          }, {
+            "new": true
+          }).exec);
 
         case 2:
-          course = _context7.sent;
+          enrollingStudent = _context7.sent;
+          res.json({
+            message: 'The student has been enrolled.',
+            enrollingStudent: enrollingStudent
+          });
 
-        case 3:
+        case 4:
         case "end":
           return _context7.stop();
       }

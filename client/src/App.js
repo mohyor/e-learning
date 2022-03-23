@@ -4,9 +4,8 @@ import Register from './pages/user/register/register'
 import Home from './pages/home/home'
 import Login from './pages/user/login/login'
 import Profile from './pages/user/profile'
-//import { AuthContext } from './context/AuthContext';
-import Courses from './pages/course/courselist'
-import Course from './pages/course/Course'
+import Courses from './pages/course/CourseList/CourseList'
+import Course from './pages/course/CoursePage/CoursePage'
 import { useDispatch, useSelector } from 'react-redux'
 import TopNav from './components/nav/TopNav'
 import 'antd/dist/antd.css'
@@ -26,12 +25,13 @@ function App() {
   return (
     <Router>
       <ToastContainer position="top-center" />
-      <TopNav />
       <Switch>
         <Route exact path='/'>
+          <TopNav />
           {userInfo ? <Home /> : <Register />}
           <Categories />
           <Banner />
+          {/*<Courses />*/}
         </Route>
         <Route path="/login">
           {!userInfo ? <Redirect to="/" /> : <Login />}
@@ -42,7 +42,10 @@ function App() {
         <Route path='/user'>
           {!userInfo ? <Redirect to='/login' /> : <Profile />}
         </Route>
-        <Route path='/courses' exact component={Courses} />
+        <Route path='/courses' exact>
+          <Categories />
+          <Courses />
+        </Route>
         <Route path='/course/:slug' exact component={Course} />
       </Switch>
     </Router>

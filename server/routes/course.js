@@ -28,7 +28,6 @@ router.put('/course/:slug', isAuth, async (req, res) => {
   const course = await Course.findOne({ slug }).exec()
   
   //if(req.profile.id != course.instructor) { return res.status(400).send('Unauthorized')}
-  
   const updated = await Course.findOneAndUpdate({ slug }, req.body, { new: true,}).exec()
   res.json(updated)
  } catch(err) { console.log("Course Update Failed", err); return res.status(400).send(err.message)}
@@ -47,24 +46,20 @@ router.get('/course/:slug', async(req, res) => {
 // Course Enrollment
 router.put('/free-enrollment/:userId', isAuth, async (req, res) => {
   try {
-   const course = await Course.findById(req.params.courseId).exec()
+   const course = await Course.findOne({ slug: req.params.slug })
    const studentCourse = await User.findByIdAndUpdate(req.params.userId, { $addToSet: { courses: req.body.courseId }, }, { new: true }).exec()
-   //const enrolledStudents = await Course.findByIdAndUpdate(req.params.courseId, { $addToSet: { students: req.body.userId }, }, { new: true }).exec
  
-   res.json({ message: 'Congratulations! You have successfully enrolled', studentCourse })
+   res.json({ message: 'Congratulations! You have successfully enrolled', studentCourse, /*enrolledStudents*/ })
   } catch(err) { console.log('free enrollment err', err); return res.status(400).send('Enrollment create failed')}
 })
 
 //router.get('/user/course/:slug', requireSignin, isEnrolled, read)
 
-// User Courses - I need to fix this code.
+// User Courses - I need to update the course params.
 router.get('/user-courses/:userId', isAuth, async (req, res) => {
   try {
    const user = await User.findById(req.params.userId)
-   const courses = await Course.find({ userId: { $in: user.courses }})
-    .populate('instructor', '_id name')
-    .exec()
-   res.status(200).json(courses)
+   res.status(200).json(user.courses)
   } catch (err) { res.status(500).json(err)} 
 })
 
@@ -78,7 +73,9 @@ router.get('/courses', async (req, res) => {
 
 // Add a student to the Course Document. - Not Working
 router.put('/enrolling/:courseId', isAuth, async(req, res) => {
-  const course = await Course.findById(req.params.courseId).exec()
+  const enrollingStudent = await Course.findOneAndUpdate({ slug: req.params.slug }, { $addToSet: { students: req.body.userId }, }, { new: true }).exec
+  
+  res.json({ message: 'The student has been enrolled.', enrollingStudent })
 })
 
 // Check Course Enrollment Status - Not Working

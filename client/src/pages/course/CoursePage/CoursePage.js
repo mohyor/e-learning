@@ -1,13 +1,12 @@
 import { useState, useEffect, useContext } from "react"
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
-import { listCourseDetails } from '../../actions/courseActions'
+import { listCourseDetails } from '../../../actions/courseActions'
 import { useHistory } from "react-router"
 //import SingleCourseJumbotron from "../../components/cards/SingleCourseJumbotron"
-import PreviewModal from "../../components/modal/PreviewModal"
-import SingleCourseLessons from "../../components/cards/SingleCourseLessons"
-import { AuthContext } from '../../context/AuthContext'
-import { toast } from "react-toastify"
+import PreviewModal from "../../../components/modal/PreviewModal"
+import './CoursePage.css'
+import CourseCard from '../../../components/cards/CourseCard'
 
 const Course = ({ match }) => {
   const dispatch = useDispatch()
@@ -18,9 +17,34 @@ const Course = ({ match }) => {
   useEffect(() => { dispatch(listCourseDetails(match.params.slug))}, [dispatch, match])
 
   return (
-    <>
-      <h3>{course.name}</h3>
-    </>
+    <div>
+      {course && 
+        <div>
+          <div className="heading_box">
+              <div>
+                <div style={{ fontSize: "36px", lineHeight: "41px", fontFamily: "inherit", paddingBottom:"15px" }}>{course.name}</div>
+                {/*<div style={{ fontSize: "21px", lineHeight: "27px", fontFamily: "inherit", paddingBottom: "10px"}}>{course.description}</div>*/}
+                {/*
+                <div className="index-card-ratting-feed">
+                  <span className="index-rating-span">{this.renderRating()}</span>
+                  <span className="index-rating-span">{course.rating}</span>
+                  <span className="index-rating-span" >({course.rating_count} ratings)</span>
+                  <span className="index-rating-span">{course.student_count} students enrolled</span>
+                </div>
+                 */}
+                <div>
+                  {/*<span style={{paddingRight:"32px", fontSize:"15px"}}>Created by {course.instructor.name}</span>*/}
+                </div>
+              </div>
+              <div className="course-feed-img-box">
+                <CourseCard course={course} />
+                <button className="back-home-button" onClick={() => history.push("/")}>Enroll!</button>  
+              </div>
+          </div>
+          {/*<CourseInfo course={this.props.course}/>*/}
+    </div>
+      }
+    </div>
   )
 }
 

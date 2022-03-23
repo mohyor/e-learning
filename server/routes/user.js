@@ -25,7 +25,7 @@ router.post('/register', async (req, res) => {
   const hashedPassword = await hashPassword(password)
   const user = new User({ name, email, password: hashedPassword, })
   await user.save()
-  return res.json({ message: "Successfully Registered." })
+  return res.json({ message: "Successfully Registered." }, user)
  } catch (err) { console.log(err)
    return res.status(400).send("Error. Try again")
  } 
@@ -37,6 +37,12 @@ router.post('/register', async (req, res) => {
 //router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.profile._id })})
 //router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.profile.id })})
 router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.profile })})
+
+// Read all users
+router.get('/users', isAuth, async (req, res) => {
+  const users = await User.find({});
+  res.send(users);
+})
 
 // Update
 router.put('/user/:userId', isAuth, (req, res) => {
@@ -89,7 +95,7 @@ router.get('/logout', async (req, res) => {
 })
 
 /*
-router.get('/current-user', requireSignin, async (req, res) => {
+router.get('/current-user', isAuth, async (req, res) => {
  try {
    const user = await User.findById(req.user._id).select('-password').exec()
    console.log('CURRENT USER', user)

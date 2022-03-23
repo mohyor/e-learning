@@ -22,7 +22,8 @@ const CourseCard = ({ course }) => {
     </div> 
     <Card className='mb-4'>
      <h2 className='font-weight-bold'>{name}</h2>
-     <p>by {instructor.name}</p>
+     {/*<p>by {instructor.name}</p>*/}
+     <p>{description}</p>
      <Badge count={category} style={{ backgroundColor: '#03a9f4' }} className='pb-2 mr-2' />
     </Card>
    </a>

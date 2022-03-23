@@ -1,0 +1,10 @@
+.course-tile {
+ display: inline-block;
+}
+
+.carousel-inner {
+ display: block;
+-webkit-transition: transform 0.7s; /* Safari prior 6.1 */
+transition: transform 0.7s;
+transition-timing-function: cubic-bezier(1, 0.3, 0.45, 0.85);
+}

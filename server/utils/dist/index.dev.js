@@ -2,7 +2,7 @@
 
 var bcrypt = require('bcrypt');
 
-exports.rejecthashPassword = function (password) {
+exports.hashPassword = function (password) {
   return new Promise(function (resolve, reject) {
     bcrypt.genSalt(12, function (err, salt) {
       if (err) {
