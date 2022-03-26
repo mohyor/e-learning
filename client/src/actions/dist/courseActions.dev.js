@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.listCourseDetails = exports.listCourses = void 0;
+exports.createCourseReview = exports.listCourseDetails = exports.listCourses = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -94,3 +94,51 @@ var listCourseDetails = function listCourseDetails(slug) {
 };
 
 exports.listCourseDetails = listCourseDetails;
+
+var createCourseReview = function createCourseReview(courseId, review) {
+  return function _callee3(dispatch, getState) {
+    var _getState, userInfo, config;
+
+    return regeneratorRuntime.async(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            _context3.prev = 0;
+            dispatch({
+              type: _courseConstants.COURSE_CREATE_REVIEW_REQUEST
+            });
+            _getState = getState(), userInfo = _getState.userLogin.userInfo;
+            config = {
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: "Bearer ".concat(userInfo.token)
+              }
+            };
+            _context3.next = 6;
+            return regeneratorRuntime.awrap(_axios["default"].put("/api/course/".concat(courseId, "/review"), review, config));
+
+          case 6:
+            dispatch({
+              type: _courseConstants.COURSE_CREATE_REVIEW_SUCCESS
+            });
+            _context3.next = 12;
+            break;
+
+          case 9:
+            _context3.prev = 9;
+            _context3.t0 = _context3["catch"](0);
+            dispatch({
+              type: _courseConstants.COURSE_CREATE_REVIEW_FAIL,
+              payload: _context3.t0.response && _context3.t0.response.data.message ? _context3.t0.response.data.message : _context3.t0.message
+            });
+
+          case 12:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, null, null, [[0, 9]]);
+  };
+};
+
+exports.createCourseReview = createCourseReview;

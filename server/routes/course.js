@@ -55,10 +55,10 @@ router.put('/free-enrollment/:userId', isAuth, async (req, res) => {
 
 //router.get('/user/course/:slug', requireSignin, isEnrolled, read)
 
-// User Courses - I need to update the course params.
+// User Courses
 router.get('/user-courses/:userId', isAuth, async (req, res) => {
   try {
-   const user = await User.findById(req.params.userId)
+   const user = await User.findById(req.params.userId).populate('courses')
    res.status(200).json(user.courses)
   } catch (err) { res.status(500).json(err)} 
 })
@@ -89,6 +89,17 @@ router.get('/enrolled-students/:courseId', isAuth, async (req, res) => {
    ids.push(user.courses[i].toString())
  }
  res.json({ status: ids.includes(courseId), course: await Course.findById(courseId).exec(),})
+})
+
+// Read Number of Users Enrolled in a Course.
+router.get('/enrolled-students/:courseId', isAuth, async (req, res) => {
+  const course = await Course.findById(req.params.id)
+  const user = await User.findById(req.params.userId)
+  const enrolledUsers = user.aggregate([
+    { $match: { courses: course }},
+    { $count: '' }
+  ])
+  res.status(200).json(enrolledUsers)
 })
 
 // Create New Review 

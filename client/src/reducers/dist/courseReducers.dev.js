@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.courseDetailsReducer = exports.courseListReducer = void 0;
+exports.courseReviewCreateReducer = exports.courseDetailsReducer = exports.courseListReducer = void 0;
 
 var _courseConstants = require("../constants/courseConstants");
 
@@ -77,3 +77,35 @@ var courseDetailsReducer = function courseDetailsReducer() {
 };
 
 exports.courseDetailsReducer = courseDetailsReducer;
+
+var courseReviewCreateReducer = function courseReviewCreateReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var action = arguments.length > 1 ? arguments[1] : undefined;
+
+  switch (action.type) {
+    case _courseConstants.COURSE_CREATE_REVIEW_REQUEST:
+      return {
+        loading: true
+      };
+
+    case _courseConstants.COURSE_CREATE_REVIEW_SUCCESS:
+      return {
+        loading: false,
+        success: true
+      };
+
+    case _courseConstants.COURSE_CREATE_REVIEW_FAIL:
+      return {
+        loading: false,
+        error: action.payload
+      };
+
+    case _courseConstants.COURSE_CREATE_REVIEW_RESET:
+      return {};
+
+    default:
+      return state;
+  }
+};
+
+exports.courseReviewCreateReducer = courseReviewCreateReducer;

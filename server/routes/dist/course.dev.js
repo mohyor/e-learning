@@ -195,7 +195,7 @@ router.put('/free-enrollment/:userId', isAuth, function _callee4(req, res) {
     }
   }, null, null, [[0, 10]]);
 }); //router.get('/user/course/:slug', requireSignin, isEnrolled, read)
-// User Courses - I need to update the course params.
+// User Courses
 
 router.get('/user-courses/:userId', isAuth, function _callee5(req, res) {
   var user;
@@ -205,7 +205,7 @@ router.get('/user-courses/:userId', isAuth, function _callee5(req, res) {
         case 0:
           _context5.prev = 0;
           _context5.next = 3;
-          return regeneratorRuntime.awrap(User.findById(req.params.userId));
+          return regeneratorRuntime.awrap(User.findById(req.params.userId).populate('courses'));
 
         case 3:
           user = _context5.sent;
@@ -319,14 +319,47 @@ router.get('/enrolled-students/:courseId', isAuth, function _callee8(req, res) {
       }
     }
   });
-}); // Create New Review 
+}); // Read Number of Users Enrolled in a Course.
 
-router.put('/course/:courseId/review', isAuth, function _callee9(req, res, next) {
-  var _req$body, rating, comment, courseId, review, course, isReviewed, avg;
-
+router.get('/enrolled-students/:courseId', isAuth, function _callee9(req, res) {
+  var course, user, enrolledUsers;
   return regeneratorRuntime.async(function _callee9$(_context9) {
     while (1) {
       switch (_context9.prev = _context9.next) {
+        case 0:
+          _context9.next = 2;
+          return regeneratorRuntime.awrap(Course.findById(req.params.id));
+
+        case 2:
+          course = _context9.sent;
+          _context9.next = 5;
+          return regeneratorRuntime.awrap(User.findById(req.params.userId));
+
+        case 5:
+          user = _context9.sent;
+          enrolledUsers = user.aggregate([{
+            $match: {
+              courses: course
+            }
+          }, {
+            $count: ''
+          }]);
+          res.status(200).json(enrolledUsers);
+
+        case 8:
+        case "end":
+          return _context9.stop();
+      }
+    }
+  });
+}); // Create New Review 
+
+router.put('/course/:courseId/review', isAuth, function _callee10(req, res, next) {
+  var _req$body, rating, comment, courseId, review, course, isReviewed, avg;
+
+  return regeneratorRuntime.async(function _callee10$(_context10) {
+    while (1) {
+      switch (_context10.prev = _context10.next) {
         case 0:
           _req$body = req.body, rating = _req$body.rating, comment = _req$body.comment, courseId = _req$body.courseId;
           review = {
@@ -335,11 +368,11 @@ router.put('/course/:courseId/review', isAuth, function _callee9(req, res, next)
             rating: Number(rating),
             comment: comment
           };
-          _context9.next = 4;
+          _context10.next = 4;
           return regeneratorRuntime.awrap(Course.findById(courseId));
 
         case 4:
-          course = _context9.sent;
+          course = _context10.sent;
           isReviewed = course.reviews.find(function (rev) {
             return rev.user.toString() === req.user._id.toString();
           });
@@ -358,7 +391,7 @@ router.put('/course/:courseId/review', isAuth, function _callee9(req, res, next)
             avg += rev.rating;
           });
           course.ratings = avg / course.reviews.length;
-          _context9.next = 12;
+          _context10.next = 12;
           return regeneratorRuntime.awrap(course.save({
             validateBeforeSave: false
           }));
@@ -368,33 +401,33 @@ router.put('/course/:courseId/review', isAuth, function _callee9(req, res, next)
 
         case 13:
         case "end":
-          return _context9.stop();
+          return _context10.stop();
       }
     }
   });
 }); // Get All Reviews of a Course 
 
-router.get('/course/:slug/reviews', isAuth, function _callee10(req, res, next) {
+router.get('/course/:slug/reviews', isAuth, function _callee11(req, res, next) {
   var course;
-  return regeneratorRuntime.async(function _callee10$(_context10) {
+  return regeneratorRuntime.async(function _callee11$(_context11) {
     while (1) {
-      switch (_context10.prev = _context10.next) {
+      switch (_context11.prev = _context11.next) {
         case 0:
-          _context10.prev = 0;
-          _context10.next = 3;
+          _context11.prev = 0;
+          _context11.next = 3;
           return regeneratorRuntime.awrap(Course.findOne({
             slug: req.params.slug
           }));
 
         case 3:
-          course = _context10.sent;
+          course = _context11.sent;
 
           if (course) {
-            _context10.next = 6;
+            _context11.next = 6;
             break;
           }
 
-          return _context10.abrupt("return", res.json({
+          return _context11.abrupt("return", res.json({
             message: "Course not found"
           }));
 
@@ -403,40 +436,40 @@ router.get('/course/:slug/reviews', isAuth, function _callee10(req, res, next) {
             success: true,
             reviews: course.reviews
           });
-          _context10.next = 12;
+          _context11.next = 12;
           break;
 
         case 9:
-          _context10.prev = 9;
-          _context10.t0 = _context10["catch"](0);
-          console.log(_context10.t0);
+          _context11.prev = 9;
+          _context11.t0 = _context11["catch"](0);
+          console.log(_context11.t0);
 
         case 12:
         case "end":
-          return _context10.stop();
+          return _context11.stop();
       }
     }
   }, null, null, [[0, 9]]);
 }); // Delete Review
 
-router["delete"]('/course/:courseId/review', isAuth, function _callee11(req, res, next) {
+router["delete"]('/course/:courseId/review', isAuth, function _callee12(req, res, next) {
   var course, reviews, avg, ratings, numOfReviews;
-  return regeneratorRuntime.async(function _callee11$(_context11) {
+  return regeneratorRuntime.async(function _callee12$(_context12) {
     while (1) {
-      switch (_context11.prev = _context11.next) {
+      switch (_context12.prev = _context12.next) {
         case 0:
-          _context11.next = 2;
+          _context12.next = 2;
           return regeneratorRuntime.awrap(Course.findById(req.query.courseId));
 
         case 2:
-          course = _context11.sent;
+          course = _context12.sent;
 
           if (course) {
-            _context11.next = 5;
+            _context12.next = 5;
             break;
           }
 
-          return _context11.abrupt("return", res.json({
+          return _context12.abrupt("return", res.json({
             message: "Course not found"
           }));
 
@@ -457,7 +490,7 @@ router["delete"]('/course/:courseId/review', isAuth, function _callee11(req, res
           }
 
           numOfReviews = reviews.length;
-          _context11.next = 13;
+          _context12.next = 13;
           return regeneratorRuntime.awrap(Course.findByIdAndUpdate(req.query.courseId, {
             reviews: reviews,
             ratings: ratings,
@@ -476,7 +509,7 @@ router["delete"]('/course/:courseId/review', isAuth, function _callee11(req, res
 
         case 14:
         case "end":
-          return _context11.stop();
+          return _context12.stop();
       }
     }
   });

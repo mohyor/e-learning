@@ -9,7 +9,7 @@ const userSchema = new Schema({
  picture: { type: String, default: '/avatar.png', },
  role: { type: [String], default: ['Subscriber'], enum: ['Subscriber', 'Instructor', 'Admin']},
  passwordResetCode: { data: String, default: '' },
- courses: [{ type: ObjectId, ref: 'Course' }],
+ courses: [{ type: ObjectId, ref: 'Course' },],
  /*stripe_account_id: "",
  stripe_seller: {},
  stripeSession: {},*/

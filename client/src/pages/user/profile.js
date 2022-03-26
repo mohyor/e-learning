@@ -4,7 +4,7 @@ import axios from "axios"
 import { Avatar } from "antd"
 import { Link } from "react-router-dom"
 import { SyncOutlined, PlayCircleOutlined } from "@ant-design/icons"
-import { useParams } from 'react-router'
+import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUserDetails, updateUserProfile } from '../../actions/userActions'
 //import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants'
@@ -12,43 +12,33 @@ import { getUserDetails, updateUserProfile } from '../../actions/userActions'
 const Profile = ({ match }) => {
   const [courses, setCourses] = useState([])
   const [loadingProfile, setLoadingProfile] = useState(false)
-  /*
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [message, setMessage] = useState(null)
 
+  const history = useHistory()
   const dispatch = useDispatch()
 
   const userDetails = useSelector((state) => state.userDetails)
   const { loading, error, user } = userDetails
 
   const userLogin = useSelector((state) => state.userLogin)
-  const { userInfo } = userLogin
+  const { userInfo } = userLogin 
 
-  const userUpdateProfile = useSelector((state) => state.userUpdateProfile)
-  const { success } = userUpdateProfile
-  */
-
-  //const { user } = useContext(AuthContext)
-
-  const dispatch = useDispatch()
-
-  const userDetails = useSelector((state) => state.userDetails)
-  const { loading, error, user } = userDetails
-   
+  /*
   useEffect(() => {
-    const loadCourses = async () => {
-    try { 
-      setLoading(true)
-      //const res = await axios.get(`/api/user-courses/6214e3360feccaf7d266ebf4`,
-      const res = await axios.get(`/api/user-courses/${match.params.id}`,
-       { headers: { Authorization: "Bearer " + JSON.parse(localStorage.getItem("user")).token}}
-      ); setCourses(res.data); setLoading(false)
-      console.log(res.data)
-    } catch(err) { console.log(err); setLoading(false) }
-  }; loadCourses()}, [match])
+    if (!userInfo) {
+      history.push('/login')
+    } else {
+      if (!user || !user.name || success) {
+        dispatch({ type: USER_UPDATE_PROFILE_RESET })
+        dispatch(getUserDetails('profile'))
+        dispatch(listMyOrders())
+      } else {
+        setName(user.name)
+        setEmail(user.email)
+      }
+    }
+  }, [dispatch, history, userInfo, user, success])
+  */
+  useEffect(() => { dispatch(getUserDetails(userInfo._id))}, [dispatch, match])
   
   return (
     <UserRoute>

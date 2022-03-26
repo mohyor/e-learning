@@ -20,6 +20,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 var reducer = (0, _redux.combineReducers)({
   courseList: _courseReducers.courseListReducer,
   courseDetails: _courseReducers.courseDetailsReducer,
+  courseReviewCreate: _courseReducers.courseReviewCreateReducer,
   userLogin: _userReducers.userLoginReducer,
   userRegister: _userReducers.userRegisterReducer,
   userDetails: _userReducers.userDetailsReducer,

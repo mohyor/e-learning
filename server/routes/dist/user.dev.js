@@ -98,29 +98,53 @@ router.post('/register', function _callee(req, res) {
 //router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.user })})
 //router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.profile._id })})
 //router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.profile.id })})
+//router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.profile })})
 
-router.get('/user/:userId', isAuth, function (req, res) {
-  res.json({
-    user: req.profile
-  });
-}); // Read all users
-
-router.get('/users', isAuth, function _callee2(req, res) {
-  var users;
+router.get('/user/:userId', isAuth, function _callee2(req, res) {
+  var user;
   return regeneratorRuntime.async(function _callee2$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
         case 0:
-          _context2.next = 2;
+          _context2.prev = 0;
+          _context2.next = 3;
+          return regeneratorRuntime.awrap(User.findById(req.params.userId).populate('courses'));
+
+        case 3:
+          user = _context2.sent;
+          res.status(200).json(user);
+          _context2.next = 10;
+          break;
+
+        case 7:
+          _context2.prev = 7;
+          _context2.t0 = _context2["catch"](0);
+          res.status(500).json(_context2.t0);
+
+        case 10:
+        case "end":
+          return _context2.stop();
+      }
+    }
+  }, null, null, [[0, 7]]);
+}); // Read all users
+
+router.get('/users', isAuth, function _callee3(req, res) {
+  var users;
+  return regeneratorRuntime.async(function _callee3$(_context3) {
+    while (1) {
+      switch (_context3.prev = _context3.next) {
+        case 0:
+          _context3.next = 2;
           return regeneratorRuntime.awrap(User.find({}));
 
         case 2:
-          users = _context2.sent;
+          users = _context3.sent;
           res.send(users);
 
         case 4:
         case "end":
-          return _context2.stop();
+          return _context3.stop();
       }
     }
   });
@@ -207,25 +231,25 @@ router.post('/login', function (req, res) {
   }
 }); // Logout
 
-router.get('/logout', function _callee3(req, res) {
-  return regeneratorRuntime.async(function _callee3$(_context3) {
+router.get('/logout', function _callee4(req, res) {
+  return regeneratorRuntime.async(function _callee4$(_context4) {
     while (1) {
-      switch (_context3.prev = _context3.next) {
+      switch (_context4.prev = _context4.next) {
         case 0:
-          _context3.prev = 0;
+          _context4.prev = 0;
           res.clearCookie('token');
-          return _context3.abrupt("return", res.json({
+          return _context4.abrupt("return", res.json({
             message: 'Signout success'
           }));
 
         case 6:
-          _context3.prev = 6;
-          _context3.t0 = _context3["catch"](0);
-          console.log(_context3.t0);
+          _context4.prev = 6;
+          _context4.t0 = _context4["catch"](0);
+          console.log(_context4.t0);
 
         case 9:
         case "end":
-          return _context3.stop();
+          return _context4.stop();
       }
     }
   }, null, null, [[0, 6]]);
@@ -240,16 +264,16 @@ router.get('/current-user', isAuth, async (req, res) => {
 })
 */
 
-router.post('/forgot-password', function _callee4(req, res) {
+router.post('/forgot-password', function _callee5(req, res) {
   var email, shortCode, user, params;
-  return regeneratorRuntime.async(function _callee4$(_context4) {
+  return regeneratorRuntime.async(function _callee5$(_context5) {
     while (1) {
-      switch (_context4.prev = _context4.next) {
+      switch (_context5.prev = _context5.next) {
         case 0:
-          _context4.prev = 0;
+          _context5.prev = 0;
           email = req.body.email;
           shortCode = nanoid(6).toUpperCase();
-          _context4.next = 5;
+          _context5.next = 5;
           return regeneratorRuntime.awrap(User.findOneAndUpdate({
             email: email
           }, {
@@ -257,14 +281,14 @@ router.post('/forgot-password', function _callee4(req, res) {
           }));
 
         case 5:
-          user = _context4.sent;
+          user = _context5.sent;
 
           if (user) {
-            _context4.next = 8;
+            _context5.next = 8;
             break;
           }
 
-          return _context4.abrupt("return", res.status(400).send('User not found'));
+          return _context5.abrupt("return", res.status(400).send('User not found'));
 
         case 8:
           // prepare for email
@@ -286,35 +310,35 @@ router.post('/forgot-password', function _callee4(req, res) {
               Data: 'Reset Password'
             }
           };
-          _context4.next = 14;
+          _context5.next = 14;
           break;
 
         case 11:
-          _context4.prev = 11;
-          _context4.t0 = _context4["catch"](0);
-          console.log(_context4.t0);
+          _context5.prev = 11;
+          _context5.t0 = _context5["catch"](0);
+          console.log(_context5.t0);
 
         case 14:
         case "end":
-          return _context4.stop();
+          return _context5.stop();
       }
     }
   }, null, null, [[0, 11]]);
 });
-router.post('/reset-password', function _callee5(req, res) {
+router.post('/reset-password', function _callee6(req, res) {
   var _req$body4, email, code, newPassword, hashedPassword, user;
 
-  return regeneratorRuntime.async(function _callee5$(_context5) {
+  return regeneratorRuntime.async(function _callee6$(_context6) {
     while (1) {
-      switch (_context5.prev = _context5.next) {
+      switch (_context6.prev = _context6.next) {
         case 0:
-          _context5.prev = 0;
+          _context6.prev = 0;
           _req$body4 = req.body, email = _req$body4.email, code = _req$body4.code, newPassword = _req$body4.newPassword;
-          _context5.next = 4;
+          _context6.next = 4;
           return regeneratorRuntime.awrap(hashedPassword(newPassword));
 
         case 4:
-          hashedPassword = _context5.sent;
+          hashedPassword = _context6.sent;
           user = User.findOneAndUpdate({
             email: email,
             passwordResetCode: code
@@ -325,18 +349,18 @@ router.post('/reset-password', function _callee5(req, res) {
           res.json({
             ok: true
           });
-          _context5.next = 13;
+          _context6.next = 13;
           break;
 
         case 9:
-          _context5.prev = 9;
-          _context5.t0 = _context5["catch"](0);
-          console.log(_context5.t0);
-          return _context5.abrupt("return", res.status(400).send('Error! Try again.'));
+          _context6.prev = 9;
+          _context6.t0 = _context6["catch"](0);
+          console.log(_context6.t0);
+          return _context6.abrupt("return", res.status(400).send('Error! Try again.'));
 
         case 13:
         case "end":
-          return _context5.stop();
+          return _context6.stop();
       }
     }
   }, null, null, [[0, 9]]);
