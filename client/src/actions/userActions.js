@@ -41,12 +41,12 @@ export const register = (name, email, password) => async (dispatch) => {
  }
 }
 
-export const getUserDetails = (userId) => async (dispatch, getState) => {
+export const getUserDetails = (id) => async (dispatch, getState) => {
  try {
-  dispatch({ type: USER_DETAILS_REQUEST, payload: userId })
+  dispatch({ type: USER_DETAILS_REQUEST })
   const { userLogin: { userInfo } } = getState() 
-  const config = { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${userInfo.token}` } }
-  const res = await axios.get(`/api/user/${userId}`, config)
+  const config = { headers: { Authorization: `Bearer ${userInfo.token}` } }
+  const res = await axios.get(`/api/user/${id}`, config)
   
   dispatch({ type: USER_DETAILS_SUCCESS, payload: res.data })
  } catch (error) { 
@@ -55,6 +55,7 @@ export const getUserDetails = (userId) => async (dispatch, getState) => {
   }) 
  }
 }
+
 
 export const updateUserProfile = (user) => async (dispatch, getState) => {
  try {

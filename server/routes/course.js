@@ -66,6 +66,7 @@ router.get('/user-courses/:userId', isAuth, async (req, res) => {
 // Courses List
 router.get('/courses', async (req, res) => {
  const all = await Course.find({ published: true })
+ .populate('category', '_id name')
   .populate('instructor', '_id name')
   .exec()
  res.json(all)

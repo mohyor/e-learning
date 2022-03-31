@@ -6,6 +6,7 @@ const courseSchema = new mongoose.Schema({
  slug: { type: String, lowercase: true, },
  embedId: { type: String, required: true },
  description: { type: String, required: true },
+ credits: { type: Number, required: true },
  category: { type: ObjectId, ref: "Category", required: true },
  instructor: { type: ObjectId, ref: 'User', required: true, },
  students: [{ type: ObjectId, ref: 'User'}],

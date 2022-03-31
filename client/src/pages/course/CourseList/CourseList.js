@@ -5,10 +5,11 @@ import { listCourses } from '../../../actions/courseActions'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import { Row, Col, Divider } from 'antd';
 
 const Courses = () => {
-  const settings = {  className: "center", infinite: true, centerPadding: "60px", slidesToShow: 3, swipeToSlide: true,slidesToScroll: 1, };
-
   const dispatch = useDispatch()
   const courseList = useSelector(state => state.courseList)
   const { loading, error, courses } = courseList
@@ -23,13 +24,13 @@ const Courses = () => {
       <div className="courses-box">
         <div className="carousel-rel-wrapper">
           {loading ? (<h2>Loading...</h2>) : error ? (<h3>{error}</h3>) : (
-          <Slider {...settings}>
+          <Row justify='center' gutter={[16, 24]}>
             {courses.map((course) => (
-              <div item key={course._id} className='col-md-4'>
+              <Col className="gutter-row" key={course._id} span={8}>
                 <CourseCard course={course} />
-              </div>
+              </Col>
             ))}
-          </Slider>
+          </Row>
           )}
         </div>
       </div>

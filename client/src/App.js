@@ -8,6 +8,7 @@ import Courses from './pages/course/CourseList/CourseList'
 import Course from './pages/course/CoursePage/CoursePage'
 import { useDispatch, useSelector } from 'react-redux'
 import TopNav from './components/nav/TopNav'
+import TagClassificationDemo from './pages/tags'
 import 'antd/dist/antd.css'
 import "./styles.css"
 import { ToastContainer } from 'react-toastify'
@@ -47,6 +48,7 @@ function App() {
           <Courses />
         </Route>
         <Route path='/course/:slug' exact component={Course} />
+        <Route path='/tags' exact component={TagClassificationDemo} />
       </Switch>
     </Router>
   );

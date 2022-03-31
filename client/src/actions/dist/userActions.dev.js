@@ -129,7 +129,7 @@ var register = function register(name, email, password) {
 
 exports.register = register;
 
-var getUserDetails = function getUserDetails(userId) {
+var getUserDetails = function getUserDetails(id) {
   return function _callee3(dispatch, getState) {
     var _getState, userInfo, config, res;
 
@@ -139,18 +139,16 @@ var getUserDetails = function getUserDetails(userId) {
           case 0:
             _context3.prev = 0;
             dispatch({
-              type: _userConstants.USER_DETAILS_REQUEST,
-              payload: userId
+              type: _userConstants.USER_DETAILS_REQUEST
             });
             _getState = getState(), userInfo = _getState.userLogin.userInfo;
             config = {
               headers: {
-                'Content-Type': 'application/json',
                 Authorization: "Bearer ".concat(userInfo.token)
               }
             };
             _context3.next = 6;
-            return regeneratorRuntime.awrap(_axios["default"].get("/api/user/".concat(userId), config));
+            return regeneratorRuntime.awrap(_axios["default"].get("/api/user/".concat(id), config));
 
           case 6:
             res = _context3.sent;

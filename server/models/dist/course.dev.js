@@ -23,6 +23,10 @@ var courseSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  credits: {
+    type: Number,
+    required: true
+  },
   category: {
     type: ObjectId,
     ref: "Category",

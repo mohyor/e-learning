@@ -10,6 +10,8 @@ import { getUserDetails, updateUserProfile } from '../../actions/userActions'
 //import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants'
 
 const Profile = ({ match }) => {
+  const userId = match.params.id
+
   const [courses, setCourses] = useState([])
   const [loadingProfile, setLoadingProfile] = useState(false)
 
@@ -19,8 +21,10 @@ const Profile = ({ match }) => {
   const userDetails = useSelector((state) => state.userDetails)
   const { loading, error, user } = userDetails
 
+  /*
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin 
+  */
 
   /*
   useEffect(() => {
@@ -38,7 +42,8 @@ const Profile = ({ match }) => {
     }
   }, [dispatch, history, userInfo, user, success])
   */
-  useEffect(() => { dispatch(getUserDetails(userInfo._id))}, [dispatch, match])
+ 
+  useEffect(() => { dispatch(getUserDetails(userId))}, [dispatch, userId])
   
   return (
     <UserRoute>

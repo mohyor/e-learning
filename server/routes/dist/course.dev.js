@@ -235,7 +235,7 @@ router.get('/courses', function _callee6(req, res) {
           _context6.next = 2;
           return regeneratorRuntime.awrap(Course.find({
             published: true
-          }).populate('instructor', '_id name').exec());
+          }).populate('category', '_id name').populate('instructor', '_id name').exec());
 
         case 2:
           all = _context6.sent;
