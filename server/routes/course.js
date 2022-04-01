@@ -46,10 +46,9 @@ router.get('/course/:slug', async(req, res) => {
 // Course Enrollment
 router.put('/free-enrollment/:userId', isAuth, async (req, res) => {
   try {
-   const course = await Course.findOne({ slug: req.params.slug })
    const studentCourse = await User.findByIdAndUpdate(req.params.userId, { $addToSet: { courses: req.body.courseId }, }, { new: true }).exec()
  
-   res.json({ message: 'Congratulations! You have successfully enrolled', studentCourse, /*enrolledStudents*/ })
+   res.json({ message: 'Congratulations! You have successfully enrolled', studentCourse })
   } catch(err) { console.log('free enrollment err', err); return res.status(400).send('Enrollment create failed')}
 })
 
@@ -66,7 +65,7 @@ router.get('/user-courses/:userId', isAuth, async (req, res) => {
 // Courses List
 router.get('/courses', async (req, res) => {
  const all = await Course.find({ published: true })
- .populate('category', '_id name')
+  .populate('category', '_id name')
   .populate('instructor', '_id name')
   .exec()
  res.json(all)

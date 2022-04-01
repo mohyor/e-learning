@@ -19,6 +19,8 @@ var jwt = require('jsonwebtoken');
 var _require3 = require('nanoid'),
     nanoid = _require3.nanoid;
 
+var faker = require('@faker-js/faker');
+
 router.param('userId', userById); // Register
 
 router.post('/register', function _callee(req, res) {
@@ -77,9 +79,7 @@ router.post('/register', function _callee(req, res) {
           return regeneratorRuntime.awrap(user.save());
 
         case 17:
-          return _context.abrupt("return", res.json({
-            message: "Successfully Registered."
-          }, user));
+          return _context.abrupt("return", res.json(user));
 
         case 20:
           _context.prev = 20;
@@ -136,7 +136,7 @@ router.get('/users', isAuth, function _callee3(req, res) {
       switch (_context3.prev = _context3.next) {
         case 0:
           _context3.next = 2;
-          return regeneratorRuntime.awrap(User.find({}));
+          return regeneratorRuntime.awrap(User.find({}).populate('courses', 'name'));
 
         case 2:
           users = _context3.sent;

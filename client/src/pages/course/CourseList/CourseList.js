@@ -18,13 +18,25 @@ const Courses = () => {
 
   return (
     <div className="index">
+      {/*
+      <div>  
+        <Row>
+          <Col span={24}>col</Col>
+        </Row>
+      </div>*/}
+      <div class="jumbotron jumbotron-fluid bg-dark">
+        <div class="container">
+          <h1 class="display-4 text-light">My learning</h1>
+          <p class="text-light">Courses</p>
+        </div>
+      </div>
       <div className="index-header-container">
           <div className="index-header">Courses</div>
       </div>
       <div className="courses-box">
         <div className="carousel-rel-wrapper">
           {loading ? (<h2>Loading...</h2>) : error ? (<h3>{error}</h3>) : (
-          <Row justify='center' gutter={[16, 24]}>
+          <Row justify='center' gutter={[16, 24]} className="mx-5 my-5">
             {courses.map((course) => (
               <Col className="gutter-row" key={course._id} span={8}>
                 <CourseCard course={course} />

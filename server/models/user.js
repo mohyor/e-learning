@@ -10,10 +10,6 @@ const userSchema = new Schema({
  role: { type: [String], default: ['Subscriber'], enum: ['Subscriber', 'Instructor', 'Admin']},
  passwordResetCode: { data: String, default: '' },
  courses: [{ type: ObjectId, ref: 'Course' },],
- /*stripe_account_id: "",
- stripe_seller: {},
- stripeSession: {},*/
- 
 }, { timestamps: true })
 
 module.exports = mongoose.model('User', userSchema)

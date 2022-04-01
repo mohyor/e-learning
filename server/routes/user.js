@@ -6,6 +6,7 @@ const User = require('../models/user')
 const { hashPassword, comparePassword } = require('../utils')
 const jwt = require('jsonwebtoken')
 const { nanoid } = require('nanoid')
+const faker = require('@faker-js/faker')
 
 router.param('userId', userById)
 
@@ -25,7 +26,7 @@ router.post('/register', async (req, res) => {
   const hashedPassword = await hashPassword(password)
   const user = new User({ name, email, password: hashedPassword, })
   await user.save()
-  return res.json({ message: "Successfully Registered." }, user)
+  return res.json(user)
  } catch (err) { console.log(err)
    return res.status(400).send("Error. Try again")
  } 
@@ -46,7 +47,7 @@ router.get('/user/:userId', isAuth, async (req, res) => {
 
 // Read all users
 router.get('/users', isAuth, async (req, res) => {
-  const users = await User.find({});
+  const users = await User.find({}).populate('courses', 'name');
   res.send(users);
 })
 

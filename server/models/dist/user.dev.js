@@ -39,10 +39,6 @@ var userSchema = new Schema({
     type: ObjectId,
     ref: 'Course'
   }]
-  /*stripe_account_id: "",
-  stripe_seller: {},
-  stripeSession: {},*/
-
 }, {
   timestamps: true
 });

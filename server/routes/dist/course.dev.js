@@ -149,20 +149,13 @@ router.get('/course/:slug', function _callee3(req, res) {
 }); // Course Enrollment
 
 router.put('/free-enrollment/:userId', isAuth, function _callee4(req, res) {
-  var course, studentCourse;
+  var studentCourse;
   return regeneratorRuntime.async(function _callee4$(_context4) {
     while (1) {
       switch (_context4.prev = _context4.next) {
         case 0:
           _context4.prev = 0;
           _context4.next = 3;
-          return regeneratorRuntime.awrap(Course.findOne({
-            slug: req.params.slug
-          }));
-
-        case 3:
-          course = _context4.sent;
-          _context4.next = 6;
           return regeneratorRuntime.awrap(User.findByIdAndUpdate(req.params.userId, {
             $addToSet: {
               courses: req.body.courseId
@@ -171,29 +164,27 @@ router.put('/free-enrollment/:userId', isAuth, function _callee4(req, res) {
             "new": true
           }).exec());
 
-        case 6:
+        case 3:
           studentCourse = _context4.sent;
           res.json({
             message: 'Congratulations! You have successfully enrolled',
             studentCourse: studentCourse
-            /*enrolledStudents*/
-
           });
-          _context4.next = 14;
+          _context4.next = 11;
           break;
 
-        case 10:
-          _context4.prev = 10;
+        case 7:
+          _context4.prev = 7;
           _context4.t0 = _context4["catch"](0);
           console.log('free enrollment err', _context4.t0);
           return _context4.abrupt("return", res.status(400).send('Enrollment create failed'));
 
-        case 14:
+        case 11:
         case "end":
           return _context4.stop();
       }
     }
-  }, null, null, [[0, 10]]);
+  }, null, null, [[0, 7]]);
 }); //router.get('/user/course/:slug', requireSignin, isEnrolled, read)
 // User Courses
 
