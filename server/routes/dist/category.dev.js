@@ -51,12 +51,12 @@ router.put('/category/:categoryId/:userId', isAuth, function (req, res) {
 
 router["delete"]('/category/:categoryId/:userId', isAuth, function (req, res) {
   var category = req.category;
-  Product.find({
+  Category.find({
     category: category
   }).exec(function (err, data) {
     if (data.length >= 1) {
       return res.status(400).json({
-        message: "Sorry. You cant delete ".concat(category.name, ". It has ").concat(data.length, " associated products.")
+        message: "Sorry. You cant delete ".concat(category.name, ". It has ").concat(data.length, " associated categories.")
       });
     } else {
       category.remove(function (err, data) {

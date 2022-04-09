@@ -32,12 +32,13 @@ router.post('/register', async (req, res) => {
  } 
 })
 
-// Read
-//router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.user._id })})
-//router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.user })})
-//router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.profile._id })})
-//router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.profile.id })})
-//router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.profile })})
+/* Read
+ router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.user._id })})
+ router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.user })})
+ router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.profile._id })})
+ router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.profile.id })})
+ router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.profile })})
+*/
 router.get('/user/:userId', isAuth, async (req, res) => { 
   try {
     const user = await User.findById(req.params.userId).populate('courses')

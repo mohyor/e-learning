@@ -1,38 +1,27 @@
 "use strict";
 
-var Mongoose = require('mongoose');
+var mongoose = require("mongoose");
 
-var Schema = Mongoose.Schema; // Review Schema
-
-var ReviewSchema = new Schema({
-  course: {
-    type: Schema.Types.ObjectId,
-    ref: 'Course',
-    "default": null
-  },
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    "default": null
-  },
-  title: {
-    type: String,
-    trim: true
+var ObjectId = mongoose.Schema.ObjectId;
+var reviewSchema = new mongoose.Schema({
+  comment: {
+    type: String
   },
   rating: {
     type: Number,
-    "default": 0
+    required: true
   },
-  review: {
-    type: String,
-    trim: true
+  course: {
+    type: ObjectId,
+    ref: "Course",
+    required: true
   },
-  //isRecommended: { type: Boolean, default: true },
-  //status: { type: String, default: 'Waiting Approval', enum: ['Waiting Approval', 'Rejected', 'Approved'] },
-  updated: Date,
-  created: {
-    type: Date,
-    "default": Date.now
+  user: {
+    type: ObjectId,
+    ref: "User",
+    required: true
   }
+}, {
+  timestamps: true
 });
-module.exports = Mongoose.model('Review', ReviewSchema);
+module.exports = mongoose.model("Review", reviewSchema);

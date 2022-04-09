@@ -34,9 +34,9 @@ router.put('/category/:categoryId/:userId', isAuth, (req, res) => {
 // Delete Category
 router.delete('/category/:categoryId/:userId', isAuth, (req, res) => {
  const category = req.category;
- Product.find({ category }).exec((err, data) => {
+ Category.find({ category }).exec((err, data) => {
   if (data.length >= 1) { 
-   return res.status(400).json({ message: `Sorry. You cant delete ${category.name}. It has ${data.length} associated products.` })
+   return res.status(400).json({ message: `Sorry. You cant delete ${category.name}. It has ${data.length} associated categories.` })
   } 
   else { category.remove((err, data) => {
    if (err) { return res.status(400).json({ error: "Failed to delete." })}

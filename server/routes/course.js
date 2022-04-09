@@ -43,6 +43,12 @@ router.get('/course/:slug', async(req, res) => {
  } catch(err) { console.log(err)}
 })
 
+// Courses List
+router.get('/courses', async (req, res) => {
+ const all = await Course.find({ published: true }).exec()
+ res.json(all)
+}) 
+
 // Course Enrollment
 router.put('/free-enrollment/:userId', isAuth, async (req, res) => {
   try {
@@ -62,14 +68,7 @@ router.get('/user-courses/:userId', isAuth, async (req, res) => {
   } catch (err) { res.status(500).json(err)} 
 })
 
-// Courses List
-router.get('/courses', async (req, res) => {
- const all = await Course.find({ published: true })
-  .populate('category', '_id name')
-  .populate('instructor', '_id name')
-  .exec()
- res.json(all)
-}) 
+
 
 // Add a student to the Course Document. - Not Working
 router.put('/enrolling/:courseId', isAuth, async(req, res) => {

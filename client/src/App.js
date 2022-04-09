@@ -40,7 +40,7 @@ function App() {
         <Route path="/register">
           {!userInfo ? <Redirect to="/" /> : <Register />}{" "}
         </Route>
-        <Route path='/user'>
+        <Route path='/user/:userId'>
           {!userInfo ? <Redirect to='/login' /> : <Profile />}
         </Route>
         <Route path='/courses' exact>

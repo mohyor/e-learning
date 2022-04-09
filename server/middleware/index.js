@@ -1,15 +1,8 @@
-//const jwt = require('express-jwt')
 const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 const Course = require('../models/course')
 const Category = require('../models/category')
 
-/*
-  exports.isAdmin = (req, res, next) => {
-  if (req.profile.role === 0) { return res.status(403).json({ error: 'Admin resource! Access denied'})}
-  next();
-  };
-*/
 
 exports.isAuth = (req, res, next) => {
   const authHeader = req.headers['authorization'];
@@ -23,19 +16,6 @@ exports.isAuth = (req, res, next) => {
     next()
   })
 }
-
-
-
-//exports.requireSignin = jwt({ secret: process.env.JWT_SECRET, userProperty: 'auth', algorithms: ['HS256']})
-
-/*
-exports.isAuth = (req, res, next) => {
-  let user = req.profile && req.auth && req.profile._id == req.auth._id
-  //if (!user) { return res.status(403).json({ error: 'Access denied'})}
-  //if (err) { console.log(err)}
-  next()
-}
-*/
 
 exports.userById = (req, res, next, id) => {
   User.findById(id).exec((err, user) => {
@@ -98,41 +78,55 @@ exports.isEnrolled = async (req, res, next) => {
 }
 
 /*
-export const requireAuth = (req, res, next) => {
-  const token = req.cookies.jwt
+  exports.requireSignin = jwt({ secret: process.env.JWT_SECRET, userProperty: 'auth', algorithms: ['HS256']})
 
-  if (token) {
-    jwt.verify(token, 'net ninja secret', (err, decodedToken) => {
-      if (err) {
-        console.log(err.message);
-        res.redirect('/login');
-      } else {
-        console.log(decodedToken);
-        next();
-      }
-    });
-  } else {
-    res.redirect('/login');
+  exports.isAuth = (req, res, next) => {
+    let user = req.profile && req.auth && req.profile._id == req.auth._id
+    //if (!user) { return res.status(403).json({ error: 'Access denied'})}
+    //if (err) { console.log(err)}
+    next()
   }
-};
 
-// check current user
-export const checkUser = (req, res, next) => {
-  const token = req.cookies.jwt;
-  if (token) {
-    jwt.verify(token, 'net ninja secret', async (err, decodedToken) => {
-      if (err) {
-        res.locals.user = null;
-        next();
-      } else {
-        let user = await User.findById(decodedToken.id);
-        res.locals.user = user;
-        next();
-      }
-    });
-  } else {
-    res.locals.user = null;
-    next();
+  exports.isAdmin = (req, res, next) => {
+  if (req.profile.role === 0) { return res.status(403).json({ error: 'Admin resource! Access denied'})}
+  next();
+  };
+
+  export const requireAuth = (req, res, next) => {
+    const token = req.cookies.jwt
+
+    if (token) {
+      jwt.verify(token, 'net ninja secret', (err, decodedToken) => {
+        if (err) {
+          console.log(err.message);
+          res.redirect('/login');
+        } else {
+          console.log(decodedToken);
+          next();
+        }
+      });
+    } else {
+      res.redirect('/login');
+    }
+  };
+
+  // check current user
+  export const checkUser = (req, res, next) => {
+    const token = req.cookies.jwt;
+    if (token) {
+      jwt.verify(token, 'net ninja secret', async (err, decodedToken) => {
+        if (err) {
+          res.locals.user = null;
+          next();
+        } else {
+          let user = await User.findById(decodedToken.id);
+          res.locals.user = user;
+          next();
+        }
+      });
+    } else {
+      res.locals.user = null;
+      next();
+    }
   }
-}
 */

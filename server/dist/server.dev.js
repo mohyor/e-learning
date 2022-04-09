@@ -22,6 +22,8 @@ var courseRoutes = require('./routes/course');
 
 var categoryRoutes = require('./routes/category');
 
+var reviewRoutes = require('./routes/review');
+
 var morgan = require('morgan'),
     app = express(),
     port = process.env.PORT || 4000,
@@ -51,6 +53,7 @@ app.use('/api', userRoutes);
 app.use('/api', instructorRoutes);
 app.use('/api', courseRoutes);
 app.use('/api', categoryRoutes);
+app.use('/api', reviewRoutes);
 app.use(cookieParser());
 app.use(csrfProtection);
 app.get('/api/csrf-token', function (req, res) {

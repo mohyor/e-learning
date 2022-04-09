@@ -7,10 +7,12 @@ import { SyncOutlined, PlayCircleOutlined } from "@ant-design/icons"
 import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUserDetails, updateUserProfile } from '../../actions/userActions'
+import { useParams } from 'react-router-dom'
 //import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants'
 
 const Profile = ({ match }) => {
-  const userId = match.params.id
+  //const userId = match.params.id
+  const { userId } = useParams()
 
   const [courses, setCourses] = useState([])
   const [loadingProfile, setLoadingProfile] = useState(false)

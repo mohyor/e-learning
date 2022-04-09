@@ -19,7 +19,7 @@ const CourseCard = ({ course }) => {
             title="Embedded youtube"
           />
           </div> 
-          <p>by {instructor.name}</p>
+          {/*<p>by {instructor.name}</p>*/}
         </a>
         <Meta title={name} />
       </Card>

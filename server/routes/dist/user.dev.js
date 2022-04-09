@@ -93,12 +93,14 @@ router.post('/register', function _callee(req, res) {
       }
     }
   }, null, null, [[0, 20]]);
-}); // Read
-//router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.user._id })})
-//router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.user })})
-//router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.profile._id })})
-//router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.profile.id })})
-//router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.profile })})
+});
+/* Read
+ router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.user._id })})
+ router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.user })})
+ router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.profile._id })})
+ router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.profile.id })})
+ router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.profile })})
+*/
 
 router.get('/user/:userId', isAuth, function _callee2(req, res) {
   var user;

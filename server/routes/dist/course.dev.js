@@ -146,16 +146,39 @@ router.get('/course/:slug', function _callee3(req, res) {
       }
     }
   }, null, null, [[0, 7]]);
-}); // Course Enrollment
+}); // Courses List
 
-router.put('/free-enrollment/:userId', isAuth, function _callee4(req, res) {
-  var studentCourse;
+router.get('/courses', function _callee4(req, res) {
+  var all;
   return regeneratorRuntime.async(function _callee4$(_context4) {
     while (1) {
       switch (_context4.prev = _context4.next) {
         case 0:
-          _context4.prev = 0;
-          _context4.next = 3;
+          _context4.next = 2;
+          return regeneratorRuntime.awrap(Course.find({
+            published: true
+          }).exec());
+
+        case 2:
+          all = _context4.sent;
+          res.json(all);
+
+        case 4:
+        case "end":
+          return _context4.stop();
+      }
+    }
+  });
+}); // Course Enrollment
+
+router.put('/free-enrollment/:userId', isAuth, function _callee5(req, res) {
+  var studentCourse;
+  return regeneratorRuntime.async(function _callee5$(_context5) {
+    while (1) {
+      switch (_context5.prev = _context5.next) {
+        case 0:
+          _context5.prev = 0;
+          _context5.next = 3;
           return regeneratorRuntime.awrap(User.findByIdAndUpdate(req.params.userId, {
             $addToSet: {
               courses: req.body.courseId
@@ -165,79 +188,56 @@ router.put('/free-enrollment/:userId', isAuth, function _callee4(req, res) {
           }).exec());
 
         case 3:
-          studentCourse = _context4.sent;
+          studentCourse = _context5.sent;
           res.json({
             message: 'Congratulations! You have successfully enrolled',
             studentCourse: studentCourse
           });
-          _context4.next = 11;
+          _context5.next = 11;
           break;
 
         case 7:
-          _context4.prev = 7;
-          _context4.t0 = _context4["catch"](0);
-          console.log('free enrollment err', _context4.t0);
-          return _context4.abrupt("return", res.status(400).send('Enrollment create failed'));
+          _context5.prev = 7;
+          _context5.t0 = _context5["catch"](0);
+          console.log('free enrollment err', _context5.t0);
+          return _context5.abrupt("return", res.status(400).send('Enrollment create failed'));
 
         case 11:
         case "end":
-          return _context4.stop();
+          return _context5.stop();
       }
     }
   }, null, null, [[0, 7]]);
 }); //router.get('/user/course/:slug', requireSignin, isEnrolled, read)
 // User Courses
 
-router.get('/user-courses/:userId', isAuth, function _callee5(req, res) {
+router.get('/user-courses/:userId', isAuth, function _callee6(req, res) {
   var user;
-  return regeneratorRuntime.async(function _callee5$(_context5) {
-    while (1) {
-      switch (_context5.prev = _context5.next) {
-        case 0:
-          _context5.prev = 0;
-          _context5.next = 3;
-          return regeneratorRuntime.awrap(User.findById(req.params.userId).populate('courses'));
-
-        case 3:
-          user = _context5.sent;
-          res.status(200).json(user.courses);
-          _context5.next = 10;
-          break;
-
-        case 7:
-          _context5.prev = 7;
-          _context5.t0 = _context5["catch"](0);
-          res.status(500).json(_context5.t0);
-
-        case 10:
-        case "end":
-          return _context5.stop();
-      }
-    }
-  }, null, null, [[0, 7]]);
-}); // Courses List
-
-router.get('/courses', function _callee6(req, res) {
-  var all;
   return regeneratorRuntime.async(function _callee6$(_context6) {
     while (1) {
       switch (_context6.prev = _context6.next) {
         case 0:
-          _context6.next = 2;
-          return regeneratorRuntime.awrap(Course.find({
-            published: true
-          }).populate('category', '_id name').populate('instructor', '_id name').exec());
+          _context6.prev = 0;
+          _context6.next = 3;
+          return regeneratorRuntime.awrap(User.findById(req.params.userId).populate('courses'));
 
-        case 2:
-          all = _context6.sent;
-          res.json(all);
+        case 3:
+          user = _context6.sent;
+          res.status(200).json(user.courses);
+          _context6.next = 10;
+          break;
 
-        case 4:
+        case 7:
+          _context6.prev = 7;
+          _context6.t0 = _context6["catch"](0);
+          res.status(500).json(_context6.t0);
+
+        case 10:
         case "end":
           return _context6.stop();
       }
     }
-  });
+  }, null, null, [[0, 7]]);
 }); // Add a student to the Course Document. - Not Working
 
 router.put('/enrolling/:courseId', isAuth, function _callee7(req, res) {

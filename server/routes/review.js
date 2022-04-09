@@ -1,70 +1,33 @@
-"use strict";
+const express = require('express');
+const router = express.Router();
 
-var express = require('express');
+const Review = require('../models/review');
+const Course = require('../models/course');
 
-var router = express.Router();
+const { isAuth, userById, reviewById } = require('../middleware')
 
-var Review = require('../models/review');
+router.param('reviewId', reviewById)
+router.param('userId', userById)
 
-var Course = require('../models/course');
+router.post('/review/create', isAuth, (req, res) => {
+ const user = req.user;
+ const review = new Review(Object.assign(req.body, { user: user._id }));
 
-var _require = require('../middleware'),
-    isAuth = _require.isAuth,
-    userById = _require.userById,
-    reviewById = _require.reviewById;
+ review.save((err, data) => {
+  if (err) { return res.status(400).json({ error: 'Review failed to be saved.'})}
+  res.status(200).json({ success: true, review: data });
+ })
+})
 
-router.param('reviewId', reviewById);
-router.param('userId', userById);
-router.post('/review/create', isAuth, function (req, res) {
-  var user = req.user;
-  var review = new Review(Object.assign(req.body, {
-    user: user._id
-  }));
-  review.save(function (err, data) {
-    if (err) {
-      return res.status(400).json({
-        error: 'Review failed to be saved.'
-      });
-    }
+router.get('/reviews', async (req, res) => {
+ try {
+  const reviews = await Review.find({})
+   .populate('user').populate('course').sort('-createdAt')
+   
+  res.status(200).json({ reviews })
+} catch (error) { res.status(400).json({ error: 'Failed to get reviews.' })}
+})
 
-    res.status(200).json({
-      success: true,
-      review: data
-    });
-  });
-});
-router.get('/reviews', function _callee(req, res) {
-  var reviews;
-  return regeneratorRuntime.async(function _callee$(_context) {
-    while (1) {
-      switch (_context.prev = _context.next) {
-        case 0:
-          _context.prev = 0;
-          _context.next = 3;
-          return regeneratorRuntime.awrap(Review.find({}).populate('user').populate('course').sort('-createdAt'));
-
-        case 3:
-          reviews = _context.sent;
-          res.status(200).json({
-            reviews: reviews
-          });
-          _context.next = 10;
-          break;
-
-        case 7:
-          _context.prev = 7;
-          _context.t0 = _context["catch"](0);
-          res.status(400).json({
-            error: 'Failed to get reviews.'
-          });
-
-        case 10:
-        case "end":
-          return _context.stop();
-      }
-    }
-  }, null, null, [[0, 7]]);
-});
 /*
 router.get('/:slug', async (req, res) => {
   try {
@@ -183,4 +146,4 @@ router.delete('/delete/:id', async (req, res) => {
 });
 */
 
-module.exports = router;
+module.exports = router

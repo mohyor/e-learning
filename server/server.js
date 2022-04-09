@@ -9,6 +9,7 @@ const userRoutes = require('./routes/user')
 const instructorRoutes = require('./routes/instructor')
 const courseRoutes = require('./routes/course')
 const categoryRoutes = require('./routes/category')
+const reviewRoutes = require('./routes/review')
 
 const morgan = require('morgan'), 
  app = express(),
@@ -29,6 +30,7 @@ app.use('/api', userRoutes)
 app.use('/api', instructorRoutes)
 app.use('/api', courseRoutes)
 app.use('/api', categoryRoutes)
+app.use('/api', reviewRoutes)
 app.use(cookieParser())
 app.use(csrfProtection)
 
