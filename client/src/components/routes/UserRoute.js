@@ -4,7 +4,6 @@ import { useHistory } from 'react-router'
 import { SyncOutlined } from "@ant-design/icons";
 import UserNav from "../nav/UserNav";
 import { useParams } from 'react-router'
-import { AuthContext } from '../../context/AuthContext'
 
 const UserRoute = ({ children, showNav = true }) => {
   const [ok, setOk] = useState(false)

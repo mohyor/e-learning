@@ -11,6 +11,11 @@ const courseRoutes = require('./routes/course')
 const categoryRoutes = require('./routes/category')
 const reviewRoutes = require('./routes/review')
 
+/*
+const courses = require("./ml/courses_data.json")
+const tfjs_model = require("./ml/tfjs_model")
+*/
+
 const morgan = require('morgan'), 
  app = express(),
  port = process.env.PORT || 4000,

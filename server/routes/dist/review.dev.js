@@ -41,7 +41,7 @@ router.get('/reviews', function _callee(req, res) {
         case 0:
           _context.prev = 0;
           _context.next = 3;
-          return regeneratorRuntime.awrap(Review.find({}).populate('user').populate('course').sort('-createdAt'));
+          return regeneratorRuntime.awrap(Review.find({}).populate('user', 'name').populate('course', 'name').sort('-createdAt'));
 
         case 3:
           reviews = _context.sent;

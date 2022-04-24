@@ -23,6 +23,11 @@ var courseRoutes = require('./routes/course');
 var categoryRoutes = require('./routes/category');
 
 var reviewRoutes = require('./routes/review');
+/*
+const courses = require("./ml/courses_data.json")
+const tfjs_model = require("./ml/tfjs_model")
+*/
+
 
 var morgan = require('morgan'),
     app = express(),

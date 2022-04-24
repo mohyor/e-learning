@@ -13,13 +13,15 @@ var reviewSchema = new mongoose.Schema({
   },
   course: {
     type: ObjectId,
-    ref: "Course",
-    required: true
+    ref: "Course"
+    /* required: true */
+
   },
   user: {
     type: ObjectId,
-    ref: "User",
-    required: true
+    ref: "User"
+    /* required: true, */
+
   }
 }, {
   timestamps: true

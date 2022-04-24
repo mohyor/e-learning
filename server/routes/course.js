@@ -53,9 +53,18 @@ router.get('/courses', async (req, res) => {
 router.put('/free-enrollment/:userId', isAuth, async (req, res) => {
   try {
    const studentCourse = await User.findByIdAndUpdate(req.params.userId, { $addToSet: { courses: req.body.courseId }, }, { new: true }).exec()
+   //const studentCourse = await User.findByIdAndUpdate(req.params.userId, { $addToSet: { 'courses.$.title': req.body.courseId }, }, { new: true }).exec()
  
    res.json({ message: 'Congratulations! You have successfully enrolled', studentCourse })
   } catch(err) { console.log('free enrollment err', err); return res.status(400).send('Enrollment create failed')}
+})
+
+// Finished Learning
+router.put('/learned/:courseId', isAuth, async (req, res) => {
+  try {
+    const learned = await User.updateOne({ _id: req.params.id }, [{ "$set": { 'courses.$.learned': true }}])
+    res.json({ message: "Finished learning the course.", learned })
+  } catch(err) { console.log(err)}
 })
 
 //router.get('/user/course/:slug', requireSignin, isEnrolled, read)
@@ -67,8 +76,6 @@ router.get('/user-courses/:userId', isAuth, async (req, res) => {
    res.status(200).json(user.courses)
   } catch (err) { res.status(500).json(err)} 
 })
-
-
 
 // Add a student to the Course Document. - Not Working
 router.put('/enrolling/:courseId', isAuth, async(req, res) => {

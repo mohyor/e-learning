@@ -17,6 +17,24 @@ exports.isAuth = (req, res, next) => {
   })
 }
 
+exports.checkAuth = async (req, res, next) => {
+  let token
+
+  if ( req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+    try {
+      token = req.headers.authorization.split(' ')[1]
+      const decoded = jwt.verify(token, process.env.JWT_SECRET)
+
+      req.user = await User.findById(decoded.id).select('-password')
+      next()
+    } catch (error) { console.error(error);
+      res.status(401); throw new Error('Not authorized, token failed')
+    }
+  }
+
+  if (!token) { res.status(401); throw new Error('Not authorized, no token')}
+}
+
 exports.userById = (req, res, next, id) => {
   User.findById(id).exec((err, user) => {
     if (err || !user) { return res.status(400).json({ error: 'User not found'})}
@@ -76,6 +94,17 @@ exports.isEnrolled = async (req, res, next) => {
     if(!ids.includes(course._id.toString())) { res.sendStatus(403)} else {next()} 
   } catch (err) { console.log(err) }
 }
+
+/*
+app.get("/recommend", (req, res) => {
+  let userId = req.query.userId
+  if (Number(userId) > 53424 || Number(userId) < 0) {
+    res.send("User Id cannot be greater than 53,424 or less than 0!")
+  } else {
+    recs = model.recommend(userId).then((recs) => { res.render("index", { recommendations: recs, forUser: true })})
+  }
+})
+*/
 
 /*
   exports.requireSignin = jwt({ secret: process.env.JWT_SECRET, userProperty: 'auth', algorithms: ['HS256']})

@@ -2,8 +2,10 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-d
 import { useContext } from "react"
 import Register from './pages/user/register/register'
 import Home from './pages/home/home'
+import InspirationBanner from './pages/home/InspirationBanner/InspirationBanner'
+import Footer from './pages/home/Footer/Footer'
 import Login from './pages/user/login/login'
-import Profile from './pages/user/profile'
+import Profile from './pages/user/Profile/profile'
 import Courses from './pages/course/CourseList/CourseList'
 import Course from './pages/course/CoursePage/CoursePage'
 import { useDispatch, useSelector } from 'react-redux'
@@ -17,7 +19,6 @@ import Categories from "./components/nav/Categories/Categories";
 import Banner from "./pages/home/Banner/Banner";
 
 function App() {
-  //const { user } = useContext(AuthContext)
   const dispatch = useDispatch()
 
   const userLogin = useSelector((state) => state.userLogin)
@@ -33,12 +34,14 @@ function App() {
           <Categories />
           <Banner />
           {/*<Courses />*/}
+          <InspirationBanner />
+          <Footer />
         </Route>
         <Route path="/login">
-          {!userInfo ? <Redirect to="/" /> : <Login />}
+          {userInfo ? <Redirect to="/" /> : <Login />}
         </Route>
         <Route path="/register">
-          {!userInfo ? <Redirect to="/" /> : <Register />}{" "}
+          {userInfo ? <Redirect to="/" /> : <Register />}{" "}
         </Route>
         <Route path='/user/:userId'>
           {!userInfo ? <Redirect to='/login' /> : <Profile />}

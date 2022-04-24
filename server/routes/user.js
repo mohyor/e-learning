@@ -1,12 +1,11 @@
 const express = require('express')
 const router = express.Router()
 
-const { isAuth, userById } = require('../middleware')
+const { isAuth, checkAuth, userById } = require('../middleware')
 const User = require('../models/user')
 const { hashPassword, comparePassword } = require('../utils')
 const jwt = require('jsonwebtoken')
 const { nanoid } = require('nanoid')
-const faker = require('@faker-js/faker')
 
 router.param('userId', userById)
 
@@ -32,6 +31,41 @@ router.post('/register', async (req, res) => {
  } 
 })
 
+// Login
+router.post('/login', (req, res) => {
+ try {
+  const { email, password } = req.body 
+  User.findOne({ email }, (err, user) => {
+    if (err || !user) return res.status(400).send("No user found")
+    
+    const match = comparePassword(password, user.password)
+    if (!match) return res.status(400).send('Wrong password')
+    
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: "9999d" }) //res.cookie('token', token, { expire: new Date() + 9999 })
+    
+    const { _id, name, email, role } = user
+    return res.json({ token, user: { _id, email, name, role }})
+  })
+ } catch (err) { console.log(err) 
+  return res.status(400).send("Error. Try again.")
+ }
+})
+
+// Logout
+router.get('/logout', async (req, res) => {
+ try { 
+   res.clearCookie('token')
+   return res.json({ message: 'Signout success' })
+   res.redirect('/')
+ } catch (err) { console.log(err) }
+})
+
+// Read all users
+router.get('/users', isAuth, async (req, res) => {
+  const users = await User.find({}).populate('courses', 'name');
+  res.send(users);
+})
+
 /* Read
  router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.user._id })})
  router.get('/user/:userId', isAuth, (req, res) => { res.json({ user: req.user })})
@@ -41,15 +75,9 @@ router.post('/register', async (req, res) => {
 */
 router.get('/user/:userId', isAuth, async (req, res) => { 
   try {
-    const user = await User.findById(req.params.userId).populate('courses')
+    const user = await User.findById(req.params.userId).populate('courses', 'name')
     res.status(200).json(user)
    } catch (err) { res.status(500).json(err)} 
-})
-
-// Read all users
-router.get('/users', isAuth, async (req, res) => {
-  const users = await User.find({}).populate('courses', 'name');
-  res.send(users);
 })
 
 // Update
@@ -68,49 +96,17 @@ router.put('/user/:userId', isAuth, (req, res) => {
      updatedUser.password = undefined; res.json(updatedUser)
    })
  })
-}
-)
-
-// Login
-router.post('/login', (req, res) => {
- try {
-   const { email, password } = req.body 
-   User.findOne({ email }, (err, user) => {
-     if (err || !user) return res.status(400).send("No user found")
-     
-     const match = comparePassword(password, user.password)
-     if (!match) return res.status(400).send('Wrong password')
-     
-     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: "9999d" })
-     //res.cookie('token', token, { expire: new Date() + 9999 })
-     
-     const { _id, name, email, role } = user
-     return res.json({ token, user: { _id, email, name, role }})
-   })
- } catch (err) { 
-   console.log(err) 
-   return res.status(400).send("Error. Try again.")
- }
 })
 
-// Logout
-router.get('/logout', async (req, res) => {
- try { 
-   res.clearCookie('token')
-   return res.json({ message: 'Signout success' })
-   res.redirect('/')
- } catch (err) { console.log(err) }
-})
+// Delete User
+router.delete('/user/:userId', isAuth, async (req, res) => {
+  const user = await User.findById(req.params.id)
 
-/*
-router.get('/current-user', isAuth, async (req, res) => {
- try {
-   const user = await User.findById(req.user._id).select('-password').exec()
-   console.log('CURRENT USER', user)
-   return res.json({ ok: true })
- } catch (err) { console.log(err)}
+  if (user) {
+    await user.remove()
+    res.json({ message: 'User removed' })
+  } else { res.status(404); throw new Error('User not found')}
 })
-*/
 
 router.post('/forgot-password', async(req, res) => {
  try {
@@ -141,3 +137,27 @@ router.post('/reset-password', async (req, res) => {
 })
 
 module.exports = router
+
+/*
+  Get Profile
+  router.get('/user/profile', checkAuth, async (req, res) => {
+    const user = await User.findById(req.user._id)
+
+    if (user) { res.json({ _id: user._id, name: user.name, email: user.email, })} 
+    else { res.status(404); throw new Error('User not found')}
+  })
+
+  Update Profile
+  router.put('/user/profile', checkAuth, async (req, res) => {
+    const user = await User.findById(req.user._id)
+
+    if (user) {
+      user.name = req.body.name || user.name
+      user.email = req.body.email || user.email
+      if (req.body.password) { user.password = req.body.password }
+
+      const updatedUser = await user.save()
+      res.json({ updatedUser }) //res.json({ _id: updatedUser._id, name: updatedUser.name, email: updatedUser.email, token: generateToken(updatedUser._id),})
+    } else { res.status(404); throw new Error('User not found')}
+  })
+*/

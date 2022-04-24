@@ -6,12 +6,13 @@ import './CoursePage.css'
 import CourseCard from '../../../components/cards/CourseCard'
 import { Modal, Button as ModalButton } from 'antd';
 import { COURSE_CREATE_REVIEW_RESET } from '../../../constants/courseConstants'
-import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap'
 import Rating from "../../../components/general/Rating"
 import Message from '../../../components/general/Message'
-import { Grid,  TextField, FormControl, FormLabel, Select, MenuItem, Button as ReviewButton } from "@mui/material";
-import { TextareaAutosize } from '@mui/base'
+//import { Grid,  TextField, FormControl, FormLabel, Select, MenuItem, Button as ReviewButton } from "@mui/material";
+//import { TextareaAutosize } from '@mui/base'
 import { SyncOutlined } from "@ant-design/icons";
+import { Form, Input, Select, Button, Row, Col, Divider } from 'antd';
+
 
 const Course = ({ match }) => {
   const [rating, setRating] = useState(0)
@@ -28,6 +29,17 @@ const Course = ({ match }) => {
 
   const courseReviewCreate = useSelector(state => state.courseReviewCreate )
   const { success: successCourseReview, loading: loadingCourseReview, error: errorCourseReview } = courseReviewCreate
+
+  const[form] = Form.useForm()
+
+  const formItemLayout = {
+    labelCol: { xs: { span: 24, }, sm: { span: 8 }, },
+    wrapperCol: { xs: { span: 24, }, sm: { span: 16, }, },
+   }
+   
+   const tailFormItemLayout = {
+    wrapperCol: { xs: { span: 24, offset: 0 }, sm: { span: 16, offset: 8 }}
+   }
 
   //useEffect(() => { dispatch(listCourseDetails(match.params.slug))}, [dispatch, match])
 
@@ -56,12 +68,12 @@ const Course = ({ match }) => {
                 <div style={{ fontSize: "36px", lineHeight: "41px", fontFamily: "inherit", paddingBottom:"15px" }}>{course.name}</div>
                 {/*<div style={{ fontSize: "21px", lineHeight: "27px", fontFamily: "inherit", paddingBottom: "10px"}}>{course.description}</div>*/}
                 {/*
-                <div className="index-card-ratting-feed">
-                  <span className="index-rating-span">{renderRating()}</span>
-                  <span className="index-rating-span">{course.rating}</span>
-                  <span className="index-rating-span" >({course.rating_count} ratings)</span>
-                  <span className="index-rating-span">{course.student_count} students enrolled</span>
-                </div>
+                  <div className="index-card-ratting-feed">
+                    <span className="index-rating-span">{renderRating()}</span>
+                    <span className="index-rating-span">{course.rating}</span>
+                    <span className="index-rating-span" >({course.rating_count} ratings)</span>
+                    <span className="index-rating-span">{course.student_count} students enrolled</span>
+                  </div>
                  */}
                 <div>
                   {/*<span style={{paddingRight:"32px", fontSize:"15px"}}>Created by {course.instructor.name}</span>*/}
@@ -74,50 +86,49 @@ const Course = ({ match }) => {
           </div>
           {/*<CourseInfo course={this.props.course}/>*/}
           <ModalButton type="secondary" onClick={() => { setIsModalVisible(true); }}>Start Learning</ModalButton>
-          <Modal title="Modal Title" visible={isModalVisible} onOk={() => { setIsModalVisible(false); }} onCancel={() => { setIsModalVisible(false); }}>
+          <Modal title={course.name} visible={isModalVisible} onOk={() => { setIsModalVisible(false); }} onCancel={() => { setIsModalVisible(false); }}>
             <CourseCard course={course} />
           </Modal>
           <div>
-          <Row>
-            <Col md={6}>
-              <h2>Reviews</h2>
+          <Row className='pl-4'>
+            <Col span={12} >
+              <Divider orientation="left"><h4>Reviews</h4></Divider>
               {course.reviews.length === 0 && <Message>No Reviews</Message>}
-                {course.reviews.map((review) => (
-                  <div item key={review._id}>
-                    <strong>{review.name}</strong>
-                    <Rating value={review.rating} />
-                    {/*<p>{review.createdAt.substring(0, 10)}</p>*/}
-                    <p>{review.comment}</p>
-                  </div>
-                ))}
-                <h2>Write a Customer Review</h2>
+                <ul className="list-group">
+                  {course.reviews.map((review) => (
+                    <li className="list-group-item" item key={review._id}>
+                      <p>{review.name}</p>
+                      <Rating value={review.rating} />
+                      {/*<p>{review.createdAt.substring(0, 10)}</p>*/}
+                      <p>{review.comment}</p>
+                    </li>
+                  ))}
+                </ul>
+                
+                <strong>Write a Customer Review</strong>
                 {successCourseReview && (<Message variant='success'>Review submitted successfully</Message>)}
                 {loadingCourseReview && <SyncOutlined spin className="d-flex justify-content-center display-1 text-primary p-5"/>}
                 {errorCourseReview && (<Message variant='danger'>{errorCourseReview}</Message>)}
                 {userInfo ? (
-                  <form onSubmit={submitHandler}>
-                  <Grid container alignItems="center" justify="center" direction="column">
-                    <Grid item>
-                     <FormControl>
-                      <Select value={rating} onChange={(e) => setRating(e.target.value)}>
-                        <MenuItem value=''>Select...</MenuItem>
-                        <MenuItem value='1'>1 - Poor</MenuItem>
-                        <MenuItem value='2'>2 - Fair</MenuItem>
-                        <MenuItem value='3'>3 - Good</MenuItem>
-                        <MenuItem value='4'>4 - Very Good</MenuItem>
-                        <MenuItem value='5'>5 - Excellent</MenuItem>
-                      </Select>
-                     </FormControl>
-                    </Grid>
-                    <Grid item>
-                     <TextareaAutosize placeholder='Enter your review' style={{ width: 200 }} onChange={(e) => setComment(e.target.value)}/>
-                   </Grid>
-                    <ReviewButton disabled={loadingCourseReview} variant="contained" color="primary" type="submit">Submit</ReviewButton>
-                  </Grid>
-                 </form>
-                ) : (
-                  <Message>Please <Link to='/login'>sign in</Link> to write a review{' '}</Message>
-                )}
+                  <Form {...formItemLayout} form={form} name='review'>
+                    <Form.Item name='rating' label='Rating' rules={[{ required: true, message: 'Kindly rate your learning experience.'}]}>
+                    <Select>
+                      <Option value=''>Select..</Option>
+                      <Option value='1'>1 - Poor</Option>
+                      <Option value='2'>2 - Fair</Option>
+                      <Option value='3'>3 - Good</Option>
+                      <Option value='4'>4 - Very Good</Option>
+                      <Option value='5'>5 - Excellent</Option>
+                    </Select>
+                    </Form.Item>
+                    <Form.Item name='comment' label='Comment' rules={[{ required: true, message: 'Kindly comment on the course.' }]}>
+                    <Input.TextArea showCount maxlength={1000} />
+                    </Form.Item>
+                    <Form.Item {...tailFormItemLayout}>
+                      <Button type='primary' htmlType='submit'>Submit</Button>
+                    </Form.Item>
+                  </Form>
+                ) : (<Message>Please <Link to='/login'>sign in</Link> to write a review{' '}</Message>)}
             </Col>
           </Row>
           </div>
@@ -130,9 +141,9 @@ const Course = ({ match }) => {
 export default Course
 
 /*
+
   const Course = ({ course }) => {
 
-  
   const [showModal, setShowModal] = useState(false)
   const [preview, setPreview] = useState('')
   const [loading, setLoading] = useState(false)

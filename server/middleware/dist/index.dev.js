@@ -19,6 +19,53 @@ exports.isAuth = function (req, res, next) {
   });
 };
 
+exports.checkAuth = function _callee(req, res, next) {
+  var token, decoded;
+  return regeneratorRuntime.async(function _callee$(_context) {
+    while (1) {
+      switch (_context.prev = _context.next) {
+        case 0:
+          if (!(req.headers.authorization && req.headers.authorization.startsWith('Bearer'))) {
+            _context.next = 15;
+            break;
+          }
+
+          _context.prev = 1;
+          token = req.headers.authorization.split(' ')[1];
+          decoded = jwt.verify(token, process.env.JWT_SECRET);
+          _context.next = 6;
+          return regeneratorRuntime.awrap(User.findById(decoded.id).select('-password'));
+
+        case 6:
+          req.user = _context.sent;
+          next();
+          _context.next = 15;
+          break;
+
+        case 10:
+          _context.prev = 10;
+          _context.t0 = _context["catch"](1);
+          console.error(_context.t0);
+          res.status(401);
+          throw new Error('Not authorized, token failed');
+
+        case 15:
+          if (token) {
+            _context.next = 18;
+            break;
+          }
+
+          res.status(401);
+          throw new Error('Not authorized, no token');
+
+        case 18:
+        case "end":
+          return _context.stop();
+      }
+    }
+  }, null, null, [[1, 10]]);
+};
+
 exports.userById = function (req, res, next, id) {
   User.findById(id).exec(function (err, user) {
     if (err || !user) {
@@ -87,65 +134,65 @@ exports.instructorById = function (req, res, next, id) {
   });
 };
 
-exports.isInstructor = function _callee(req, res, next, id) {
+exports.isInstructor = function _callee2(req, res, next, id) {
   var user;
-  return regeneratorRuntime.async(function _callee$(_context) {
-    while (1) {
-      switch (_context.prev = _context.next) {
-        case 0:
-          _context.prev = 0;
-          _context.next = 3;
-          return regeneratorRuntime.awrap(User.findById(id).exec());
-
-        case 3:
-          user = _context.sent;
-
-          if (user.role.includes('Instructor')) {
-            _context.next = 8;
-            break;
-          }
-
-          return _context.abrupt("return", res.sendStatus(403));
-
-        case 8:
-          next();
-
-        case 9:
-          _context.next = 14;
-          break;
-
-        case 11:
-          _context.prev = 11;
-          _context.t0 = _context["catch"](0);
-          console.log(_context.t0);
-
-        case 14:
-        case "end":
-          return _context.stop();
-      }
-    }
-  }, null, null, [[0, 11]]);
-};
-
-exports.isEnrolled = function _callee2(req, res, next) {
-  var user, course, ids, i;
   return regeneratorRuntime.async(function _callee2$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
         case 0:
           _context2.prev = 0;
           _context2.next = 3;
-          return regeneratorRuntime.awrap(User.findById(req.user._id).exec());
+          return regeneratorRuntime.awrap(User.findById(id).exec());
 
         case 3:
           user = _context2.sent;
-          _context2.next = 6;
+
+          if (user.role.includes('Instructor')) {
+            _context2.next = 8;
+            break;
+          }
+
+          return _context2.abrupt("return", res.sendStatus(403));
+
+        case 8:
+          next();
+
+        case 9:
+          _context2.next = 14;
+          break;
+
+        case 11:
+          _context2.prev = 11;
+          _context2.t0 = _context2["catch"](0);
+          console.log(_context2.t0);
+
+        case 14:
+        case "end":
+          return _context2.stop();
+      }
+    }
+  }, null, null, [[0, 11]]);
+};
+
+exports.isEnrolled = function _callee3(req, res, next) {
+  var user, course, ids, i;
+  return regeneratorRuntime.async(function _callee3$(_context3) {
+    while (1) {
+      switch (_context3.prev = _context3.next) {
+        case 0:
+          _context3.prev = 0;
+          _context3.next = 3;
+          return regeneratorRuntime.awrap(User.findById(req.user._id).exec());
+
+        case 3:
+          user = _context3.sent;
+          _context3.next = 6;
           return regeneratorRuntime.awrap(Course.findOne({
             slug: req.params.slug
           }).exec());
 
         case 6:
-          course = _context2.sent;
+          course = _context3.sent;
           ids = [];
 
           for (i = 0; i < user.courses.length; i++) {
@@ -158,21 +205,32 @@ exports.isEnrolled = function _callee2(req, res, next) {
             next();
           }
 
-          _context2.next = 15;
+          _context3.next = 15;
           break;
 
         case 12:
-          _context2.prev = 12;
-          _context2.t0 = _context2["catch"](0);
-          console.log(_context2.t0);
+          _context3.prev = 12;
+          _context3.t0 = _context3["catch"](0);
+          console.log(_context3.t0);
 
         case 15:
         case "end":
-          return _context2.stop();
+          return _context3.stop();
       }
     }
   }, null, null, [[0, 12]]);
 };
+/*
+app.get("/recommend", (req, res) => {
+  let userId = req.query.userId
+  if (Number(userId) > 53424 || Number(userId) < 0) {
+    res.send("User Id cannot be greater than 53,424 or less than 0!")
+  } else {
+    recs = model.recommend(userId).then((recs) => { res.render("index", { recommendations: recs, forUser: true })})
+  }
+})
+*/
+
 /*
   exports.requireSignin = jwt({ secret: process.env.JWT_SECRET, userProperty: 'auth', algorithms: ['HS256']})
 

@@ -1,31 +1,35 @@
 
-import axios from 'axios'
-import CourseCard from '../../components/cards/CourseCard'
-//const YOUTUBE_PLAYLIST_ITEMS_API = 'https://www.googleapis.com/youtube/v3/playlistItems'
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
+import { useContext } from "react"
+import Register from './pages/user/register/register'
+import Home from './pages/home/home'
+import InspirationBanner from './pages/home/InspirationBanner/InspirationBanner'
+import Footer from './pages/home/Footer/Footer'
+import Login from './pages/user/login/login'
+import Profile from './pages/user/Profile/profile'
+import Courses from './pages/course/CourseList/CourseList'
+import Course from './pages/course/CoursePage/CoursePage'
+import { useDispatch, useSelector } from 'react-redux'
+import TopNav from './components/nav/TopNav'
+import TagClassificationDemo from './pages/tags'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import Categories from "./components/nav/Categories/Categories";
+import Banner from "./pages/home/Banner/Banner";
 
 
-const Home = ({ courses }) => {
+const Home = () => {
  return (
-  <>
-   {/*<h1 className="jumbotron text-center bg-primary square"> Final Year Project</h1>*/}
-   <div className='container-fluid'>
-     {/*<div className='row'>{courses.map((course) => (<div key={course._id} className='col-md-4'><CourseCard course={course} /></div>))}</div>*/} 
-   </div> 
-  </>
+  <div>
+    <TopNav />
+    {userInfo ? <Home /> : <Register />}
+    <Categories />
+    <Banner />
+    {/*<Courses />*/}
+    <InspirationBanner />
+    <Footer />
+  </div>
  )
 }
-
-/*
-export async function getServerSideProps() { 
- const { data } = await axios.get(`${process.env.API}/courses`)
- return { props: { courses: data, } }
-}
-
-export async function getServerSideProps() {
- const res = await fetch(`${YOUTUBE_PLAYLIST_ITEMS_API}?part=snippet&maxResults=30&playlistId=PLUl4u3cNGP63LmSVIVzy584-ZbjbJ-Y63&key=${process.env.GOOGLE_CLOUD_API_KEY}`)
- const data = await res.json()
- return { props: { data }}
-}
-*/
 
 export default Home

@@ -22,7 +22,7 @@ router.post('/review/create', isAuth, (req, res) => {
 router.get('/reviews', async (req, res) => {
  try {
   const reviews = await Review.find({})
-   .populate('user').populate('course').sort('-createdAt')
+   .populate('user', 'name').populate('course', 'name').sort('-createdAt')
    
   res.status(200).json({ reviews })
 } catch (error) { res.status(400).json({ error: 'Failed to get reviews.' })}

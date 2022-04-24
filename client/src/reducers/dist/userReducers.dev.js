@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.userUpdateProfileReducer = exports.userDetailsReducer = exports.userRegisterReducer = exports.userLoginReducer = void 0;
+exports.userDeleteReducer = exports.userUpdateReducer = exports.userListReducer = exports.userUpdateProfileReducer = exports.userDetailsReducer = exports.userRegisterReducer = exports.userLoginReducer = void 0;
 
 var _userConstants = require("../constants/userConstants");
 
@@ -146,3 +146,104 @@ var userUpdateProfileReducer = function userUpdateProfileReducer() {
 };
 
 exports.userUpdateProfileReducer = userUpdateProfileReducer;
+
+var userListReducer = function userListReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
+    users: []
+  };
+  var action = arguments.length > 1 ? arguments[1] : undefined;
+
+  switch (action.type) {
+    case _userConstants.USER_LIST_REQUEST:
+      return {
+        loading: true
+      };
+
+    case _userConstants.USER_LIST_SUCCESS:
+      return {
+        loading: false,
+        users: action.payload
+      };
+
+    case _userConstants.USER_LIST_FAIL:
+      return {
+        loading: false,
+        error: action.payload
+      };
+
+    case _userConstants.USER_LIST_RESET:
+      return {
+        users: []
+      };
+
+    default:
+      return state;
+  }
+};
+
+exports.userListReducer = userListReducer;
+
+var userUpdateReducer = function userUpdateReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
+    user: {}
+  };
+  var action = arguments.length > 1 ? arguments[1] : undefined;
+
+  switch (action.type) {
+    case _userConstants.USER_UPDATE_REQUEST:
+      return {
+        loading: true
+      };
+
+    case _userConstants.USER_UPDATE_SUCCESS:
+      return {
+        loading: false,
+        success: true
+      };
+
+    case _userConstants.USER_UPDATE_FAIL:
+      return {
+        loading: false,
+        error: action.payload
+      };
+
+    case _userConstants.USER_UPDATE_RESET:
+      return {
+        user: {}
+      };
+
+    default:
+      return state;
+  }
+};
+
+exports.userUpdateReducer = userUpdateReducer;
+
+var userDeleteReducer = function userDeleteReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var action = arguments.length > 1 ? arguments[1] : undefined;
+
+  switch (action.type) {
+    case _userConstants.USER_DELETE_REQUEST:
+      return {
+        loading: true
+      };
+
+    case _userConstants.USER_DELETE_SUCCESS:
+      return {
+        loading: false,
+        success: true
+      };
+
+    case _userConstants.USER_DELETE_FAIL:
+      return {
+        loading: false,
+        error: action.payload
+      };
+
+    default:
+      return state;
+  }
+};
+
+exports.userDeleteReducer = userDeleteReducer;

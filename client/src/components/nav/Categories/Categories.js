@@ -3,19 +3,12 @@ import './Categories.css'
 const Categories = () => {
  return (
   <div className="categories">
-   <p className="categories__text">Development</p>
-   <p className="categories__text">Business</p>
-   <p className="categories__text">Finance & Accounting</p>
-   <p className="categories__text">Finance & Accounting</p>
-   <p className="categories__text">IT & Software</p>
-   <p className="categories__text">Office Productivity</p>
-   <p className="categories__text">Personal Development</p>
-   <p className="categories__text">Design</p>
-   <p className="categories__text">Marketing</p>
-   <p className="categories__text">Health & Fitness</p>
-   <p className="categories__text">Music</p>
+   <p className="categories__text">200 Level</p>
+   <p className="categories__text">300 Level</p>
+   <p className="categories__text">400 Level</p>
+   <p className="categories__text">500 Level</p>
   </div>
-);
+  );
 }
 
 export default Categories

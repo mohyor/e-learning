@@ -2,7 +2,6 @@ import { useEffect, useState, useContext } from "react";
 import axios from 'axios'
 import { useHistory } from 'react-router'
 import { SyncOutlined } from "@ant-design/icons";
-import { AuthContext } from '../../context/AuthContext'
 
 const StudentRoute = ({ children, showNav = true }) => {
  const [ok, setOk] = useState(false)

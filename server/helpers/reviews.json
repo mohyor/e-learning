@@ -1,0 +1,24 @@
+{
+	"reviews": [
+		{
+			"comment": "Dolor facere est eos nam et excepturi est adipisci. Blanditiis ipsam ut qui illo nihil architecto atque impedit explicabo. Ipsum ipsum nisi doloremque.",
+			"rating": 5,
+			"course": {
+				"$oid": "62414353b28d80ff20172feb"
+			},
+			"user": {
+				"$oid": "62414353b28d80ff20172feb"
+			}
+		},
+		{
+			"comment": "Consequatur velit quisquam optio dolore.",
+			"rating": 0.5,
+			"course": {
+				"$oid": "62414353b28d80ff20172feb"
+			},
+			"user": {
+				"$oid": "62414353b28d80ff20172feb"
+			}
+		}
+	]
+}
