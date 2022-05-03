@@ -11,21 +11,15 @@ const courseRoutes = require('./routes/course')
 const categoryRoutes = require('./routes/category')
 const reviewRoutes = require('./routes/review')
 
-/*
-const courses = require("./ml/courses_data.json")
-const tfjs_model = require("./ml/tfjs_model")
-*/
-
 const morgan = require('morgan'), 
  app = express(),
  port = process.env.PORT || 4000,
  csrfProtection = csrf({ cookie: true })
 
-mongoose.connect("mongodb://localhost:27017/finalyrproj", { useNewUrlParser: true, useUnifiedTopology: true, })
+mongoose.connect("mongodb+srv://mohyor:firebird14@mern.zyc5j.mongodb.net/elearning", { useNewUrlParser: true, useUnifiedTopology: true, })
  .then(() => console.log('DB CONNECTED'))
  .catch((err) => console.log("DB CONNECTION ERR =>", err))
 
-// apply middlewares
 app.use(cors())
 app.use(express.json({ limit: '5mb' }))
 app.use(morgan("dev"))

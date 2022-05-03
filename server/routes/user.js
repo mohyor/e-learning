@@ -136,28 +136,29 @@ router.post('/reset-password', async (req, res) => {
   }
 })
 
+//Get Profile
+router.get('/user/profile', checkAuth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id)
+
+    //if (user) { res.json({ _id: user._id, name: user.name, email: user.email, })} 
+    //else { res.status(404); throw new Error('User isn't found')}
+  }
+  catch(err) {console.log(err)}
+})
+
+//Update Profile
+router.put('/user/profile', checkAuth, async (req, res) => {
+  const user = await User.findById(req.user._id)
+
+  if (user) {
+    user.name = req.body.name || user.name
+    user.email = req.body.email || user.email
+    if (req.body.password) { user.password = req.body.password }
+
+    const updatedUser = await user.save()
+    res.json({ updatedUser }) //res.json({ _id: updatedUser._id, name: updatedUser.name, email: updatedUser.email, token: generateToken(updatedUser._id),})
+  } else { res.status(404); throw new Error('User not found')}
+})
+
 module.exports = router
-
-/*
-  Get Profile
-  router.get('/user/profile', checkAuth, async (req, res) => {
-    const user = await User.findById(req.user._id)
-
-    if (user) { res.json({ _id: user._id, name: user.name, email: user.email, })} 
-    else { res.status(404); throw new Error('User not found')}
-  })
-
-  Update Profile
-  router.put('/user/profile', checkAuth, async (req, res) => {
-    const user = await User.findById(req.user._id)
-
-    if (user) {
-      user.name = req.body.name || user.name
-      user.email = req.body.email || user.email
-      if (req.body.password) { user.password = req.body.password }
-
-      const updatedUser = await user.save()
-      res.json({ updatedUser }) //res.json({ _id: updatedUser._id, name: updatedUser.name, email: updatedUser.email, token: generateToken(updatedUser._id),})
-    } else { res.status(404); throw new Error('User not found')}
-  })
-*/

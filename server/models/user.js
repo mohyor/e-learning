@@ -4,18 +4,18 @@ const { ObjectId } = Schema
 
 const userSchema = new Schema({
  name: { type: String, trim: true, required: true, },
- userNo: { type: String, /* required: true */ },
+ userNo: { type: String, required: true },
  email: { type: String, trim: true, required: true, unique: true },
  password: { type: String, required: true, min: 6, max: 64, },
- picture: { type: String, default: '/avatar.png', },
+ //picture: { type: String, default: '/avatar.png', },
  role: { type: [String], default: ['Subscriber'], enum: ['Subscriber', 'Instructor', 'Admin']},
  passwordResetCode: { data: String, default: '' },
- courses: [{ type: ObjectId, ref: 'Course' },],
- /*
-  courses: [{ 
-   title: { type: ObjectId, ref: 'Course', required: true },
-   learned: { type: Boolean, default: false },
-  }],
+ //courses: [{ type: ObjectId, ref: 'Course' },],
+ courses: [{
+  title: { type: ObjectId, ref: 'Course', required: true },
+  //learned: { type: Boolean, default: false },
+ }],
+  /*
   social: [{ 
    title: { type: ObjectId, ref: 'Social', required: true },
    link: { type: String, default: false },

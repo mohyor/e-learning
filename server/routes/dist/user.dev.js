@@ -394,28 +394,81 @@ router.post('/reset-password', function _callee7(req, res) {
       }
     }
   }, null, null, [[0, 9]]);
+}); //Get Profile
+
+router.get('/user/profile', checkAuth, function _callee8(req, res) {
+  var user;
+  return regeneratorRuntime.async(function _callee8$(_context8) {
+    while (1) {
+      switch (_context8.prev = _context8.next) {
+        case 0:
+          _context8.prev = 0;
+          _context8.next = 3;
+          return regeneratorRuntime.awrap(User.findById(req.user._id));
+
+        case 3:
+          user = _context8.sent;
+          _context8.next = 9;
+          break;
+
+        case 6:
+          _context8.prev = 6;
+          _context8.t0 = _context8["catch"](0);
+          console.log(_context8.t0);
+
+        case 9:
+        case "end":
+          return _context8.stop();
+      }
+    }
+  }, null, null, [[0, 6]]);
+}); //Update Profile
+
+router.put('/user/profile', checkAuth, function _callee9(req, res) {
+  var user, updatedUser;
+  return regeneratorRuntime.async(function _callee9$(_context9) {
+    while (1) {
+      switch (_context9.prev = _context9.next) {
+        case 0:
+          _context9.next = 2;
+          return regeneratorRuntime.awrap(User.findById(req.user._id));
+
+        case 2:
+          user = _context9.sent;
+
+          if (!user) {
+            _context9.next = 13;
+            break;
+          }
+
+          user.name = req.body.name || user.name;
+          user.email = req.body.email || user.email;
+
+          if (req.body.password) {
+            user.password = req.body.password;
+          }
+
+          _context9.next = 9;
+          return regeneratorRuntime.awrap(user.save());
+
+        case 9:
+          updatedUser = _context9.sent;
+          res.json({
+            updatedUser: updatedUser
+          }); //res.json({ _id: updatedUser._id, name: updatedUser.name, email: updatedUser.email, token: generateToken(updatedUser._id),})
+
+          _context9.next = 15;
+          break;
+
+        case 13:
+          res.status(404);
+          throw new Error('User not found');
+
+        case 15:
+        case "end":
+          return _context9.stop();
+      }
+    }
+  });
 });
 module.exports = router;
-/*
-  Get Profile
-  router.get('/user/profile', checkAuth, async (req, res) => {
-    const user = await User.findById(req.user._id)
-
-    if (user) { res.json({ _id: user._id, name: user.name, email: user.email, })} 
-    else { res.status(404); throw new Error('User not found')}
-  })
-
-  Update Profile
-  router.put('/user/profile', checkAuth, async (req, res) => {
-    const user = await User.findById(req.user._id)
-
-    if (user) {
-      user.name = req.body.name || user.name
-      user.email = req.body.email || user.email
-      if (req.body.password) { user.password = req.body.password }
-
-      const updatedUser = await user.save()
-      res.json({ updatedUser }) //res.json({ _id: updatedUser._id, name: updatedUser.name, email: updatedUser.email, token: generateToken(updatedUser._id),})
-    } else { res.status(404); throw new Error('User not found')}
-  })
-*/

@@ -547,7 +547,15 @@ router["delete"]('/course/:courseId/review', isAuth, function _callee13(req, res
 module.exports = router; ///////////
 
 /*
-  
+router.get("/recommend", recommend, (req, res) => {
+  let userId = req.query.userId
+  if (Number(userId) > 1000 || Number(userId) < 0) {
+    res.send("User Id cannot be greater than 1000 or less than 0!")
+  } else {
+    recs = model.recommend(userId).then((recs) => { res.render("index", { recommendations: recs, forUser: true })})
+  }
+})  
+
 router.put('/course/publish/:courseId', requireSignin, async (req, res) => {
  try {
   const { courseId } = req.params

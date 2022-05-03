@@ -3,7 +3,6 @@ const User = require('../models/user')
 const Course = require('../models/course')
 const Category = require('../models/category')
 
-
 exports.isAuth = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1]
@@ -20,7 +19,7 @@ exports.isAuth = (req, res, next) => {
 exports.checkAuth = async (req, res, next) => {
   let token
 
-  if ( req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     try {
       token = req.headers.authorization.split(' ')[1]
       const decoded = jwt.verify(token, process.env.JWT_SECRET)
@@ -104,7 +103,6 @@ app.get("/recommend", (req, res) => {
     recs = model.recommend(userId).then((recs) => { res.render("index", { recommendations: recs, forUser: true })})
   }
 })
-*/
 
 /*
   exports.requireSignin = jwt({ secret: process.env.JWT_SECRET, userProperty: 'auth', algorithms: ['HS256']})
@@ -158,4 +156,38 @@ app.get("/recommend", (req, res) => {
       next();
     }
   }
+
+
+async function loadModel() {
+ console.log('Loading Model...')
+ //model = await tf.loadLayersModel("file:///home/dsn/personal/Tfjs/TensorFlowjs_Projects/recommender-sys/recommender-courses/model/model.json", false);
+ model = await tf.loadLayersModel('../ml/model/model.json', false);
+ console.log('Model Loaded Successfully')
+ // model.summary()
+}
+
+const course_arr = tf.range(0, courses.length)
+const course_len = courses.length
+
+
+exports.recommend = async function recommend(userId) {
+    let user = tf.fill([course_len], Number(userId))
+    let course_in_js_array = course_arr.arraySync()
+    await loadModel()
+    console.log(`Recommending for User: ${userId}`)
+    pred_tensor = await model.predict([course_arr, user]).reshape([10000])
+    pred = pred_tensor.arraySync()
+    
+    let recommendations = []
+    for (let i = 0; i < 4; i++) {
+        max = pred_tensor.argMax().arraySync()
+        recommendations.push(courses[max]) //Push course with highest prediction probability
+        pred.splice(max, 1)    //drop from array
+        pred_tensor = tf.tensor(pred) //create a new tensor
+    }
+    
+    return recommendations
+
+}
+
 */

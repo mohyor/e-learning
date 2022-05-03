@@ -23,11 +23,6 @@ var courseRoutes = require('./routes/course');
 var categoryRoutes = require('./routes/category');
 
 var reviewRoutes = require('./routes/review');
-/*
-const courses = require("./ml/courses_data.json")
-const tfjs_model = require("./ml/tfjs_model")
-*/
-
 
 var morgan = require('morgan'),
     app = express(),
@@ -36,15 +31,14 @@ var morgan = require('morgan'),
   cookie: true
 });
 
-mongoose.connect("mongodb://localhost:27017/finalyrproj", {
+mongoose.connect("mongodb+srv://mohyor:firebird14@mern.zyc5j.mongodb.net/elearning", {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(function () {
   return console.log('DB CONNECTED');
 })["catch"](function (err) {
   return console.log("DB CONNECTION ERR =>", err);
-}); // apply middlewares
-
+});
 app.use(cors());
 app.use(express.json({
   limit: '5mb'

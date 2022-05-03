@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import { useContext } from "react"
 import Register from './pages/user/register/register'
-import Home from './pages/home/home'
+import Home from './pages/home/Home'
 import InspirationBanner from './pages/home/InspirationBanner/InspirationBanner'
 import Footer from './pages/home/Footer/Footer'
 import Login from './pages/user/login/login'
@@ -19,8 +19,6 @@ import Categories from "./components/nav/Categories/Categories";
 import Banner from "./pages/home/Banner/Banner";
 
 function App() {
-  const dispatch = useDispatch()
-
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
@@ -28,18 +26,10 @@ function App() {
     <Router>
       <ToastContainer position="top-center" />
       <Switch>
-        <Route exact path='/'>
-          <TopNav />
-          {userInfo ? <Home /> : <Register />}
-          <Categories />
-          <Banner />
-          {/*<Courses />*/}
-          <InspirationBanner />
-          <Footer />
-        </Route>
         <Route path="/login">
           {userInfo ? <Redirect to="/" /> : <Login />}
         </Route>
+        <Route exact path='/' component={Home} />
         <Route path="/register">
           {userInfo ? <Redirect to="/" /> : <Register />}{" "}
         </Route>

@@ -11,9 +11,8 @@ var userSchema = new Schema({
     required: true
   },
   userNo: {
-    type: String
-    /* required: true */
-
+    type: String,
+    required: true
   },
   email: {
     type: String,
@@ -27,10 +26,7 @@ var userSchema = new Schema({
     min: 6,
     max: 64
   },
-  picture: {
-    type: String,
-    "default": '/avatar.png'
-  },
+  //picture: { type: String, default: '/avatar.png', },
   role: {
     type: [String],
     "default": ['Subscriber'],
@@ -40,19 +36,20 @@ var userSchema = new Schema({
     data: String,
     "default": ''
   },
+  //courses: [{ type: ObjectId, ref: 'Course' },],
   courses: [{
-    type: ObjectId,
-    ref: 'Course'
+    title: {
+      type: ObjectId,
+      ref: 'Course',
+      required: true
+    } //learned: { type: Boolean, default: false },
+
   }]
   /*
-   courses: [{ 
-    title: { type: ObjectId, ref: 'Course', required: true },
-    learned: { type: Boolean, default: false },
-   }],
-   social: [{ 
-    title: { type: ObjectId, ref: 'Social', required: true },
-    link: { type: String, default: false },
-   }],
+  social: [{ 
+   title: { type: ObjectId, ref: 'Social', required: true },
+   link: { type: String, default: false },
+  }],
   */
 
 }, {
