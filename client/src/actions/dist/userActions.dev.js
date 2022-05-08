@@ -66,7 +66,7 @@ var logout = function logout() {
   return function (dispatch) {
     localStorage.removeItem('userInfo');
     dispatch({
-      type: USER_LOGOUT
+      type: _userConstants.USER_LOGOUT
     });
   };
 };
@@ -211,7 +211,7 @@ var updateUser = function updateUser(user) {
               payload: res.data
             });
             dispatch({
-              type: USER_DETAILS_RESET
+              type: _userConstants.USER_DETAILS_RESET
             });
             _context4.next = 17;
             break;

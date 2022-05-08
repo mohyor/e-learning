@@ -11,8 +11,9 @@ var userSchema = new Schema({
     required: true
   },
   userNo: {
-    type: String,
-    required: true
+    type: String
+    /*required: true */
+
   },
   email: {
     type: String,

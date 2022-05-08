@@ -11,12 +11,13 @@ router.param('userId', userById)
 router.param("courseId", courseById)
 
 // Create Course
-router.post('/course/:userId', isAuth, isInstructor, async(req, res) => {
+//router.post('/course/:userId', isAuth, /*isInstructor,*/ async(req, res) => {
+router.post('/course', isAuth, /*isInstructor,*/ async(req, res) => {
  try { 
   const alreadyExist = await Course.findOne({ slug: slugify(req.body.name.toLowerCase()),})
   if (alreadyExist) return res.status(400).send('Title is taken')
    
-  const course = await new Course({ slug: slugify(req.body.name), instructor: req.profile.id, ...req.body, }).save()
+  const course = await new Course({ slug: slugify(req.body.name), /*instructor: req.profile.id,*/ ...req.body, }).save()
   res.json(course)
  } catch(err) { console.log(err); return res.status(400).send('Course create failed. Try again')}
 })
@@ -49,14 +50,13 @@ router.get('/courses', async (req, res) => {
  res.json(all)
 }) 
 
-// Course Enrollment
+// Free Course Enrollment
 router.put('/free-enrollment/:userId', isAuth, async (req, res) => {
   try {
    const studentCourse = await User.findByIdAndUpdate(req.params.userId, { $addToSet: { courses: req.body.courseId }, }, { new: true }).exec()
-   //const studentCourse = await User.findByIdAndUpdate(req.params.userId, { $addToSet: { 'courses.$.title': req.body.courseId }, }, { new: true }).exec()
  
-   res.json({ message: 'Congratulations! You have successfully enrolled', studentCourse })
-  } catch(err) { console.log('free enrollment err', err); return res.status(400).send('Enrollment create failed')}
+   res.json({ message: 'Enrolled!', studentCourse })
+  } catch(err) { console.log(err); return res.status(400).send('Enrollment failed!')}
 })
 
 // Finished Learning
@@ -108,6 +108,23 @@ router.get('/enrolled-students/:courseId', isAuth, async (req, res) => {
   res.status(200).json(enrolledUsers)
 })
 
+/*
+// Course Enrollment
+router.put('/enrollment/:userId', isAuth, async (req, res) => {
+  try {
+    const { courseId } = req.body
+    const enroll = { title: req.params.courseId }
+    const enrollingStudent = await User.findById(req.params.userId)
+
+    enrollingStudent.courses.push(enroll)
+
+    await enrollingStudent.save()
+    
+    res.json({ message: 'Enrolled!', enrollingStudent })
+  } catch(err) { console.log(err); return res.status(400).send('Enrollment failed!')}
+})
+*/
+
 // Create New Review 
 router.put('/course/:courseId/review', isAuth, async (req, res, next) => {
   const { rating, comment, courseId } = req.body;
@@ -134,7 +151,6 @@ router.put('/course/:courseId/review', isAuth, async (req, res, next) => {
   await course.save({ validateBeforeSave: false });
   res.status(200).json(course);
 });
-
 // Get All Reviews of a Course 
 router.get('/course/:slug/reviews', isAuth, async (req, res, next) => {
   try {

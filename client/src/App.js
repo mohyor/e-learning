@@ -1,22 +1,16 @@
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
-import { useContext } from "react"
 import Register from './pages/user/register/register'
 import Home from './pages/home/Home'
-import InspirationBanner from './pages/home/InspirationBanner/InspirationBanner'
-import Footer from './pages/home/Footer/Footer'
 import Login from './pages/user/login/login'
 import Profile from './pages/user/Profile/profile'
 import Courses from './pages/course/CourseList/CourseList'
 import Course from './pages/course/CoursePage/CoursePage'
 import { useDispatch, useSelector } from 'react-redux'
-import TopNav from './components/nav/TopNav'
-import TagClassificationDemo from './pages/tags'
 import 'antd/dist/antd.css'
 import "./styles.css"
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Categories from "./components/nav/Categories/Categories";
-import Banner from "./pages/home/Banner/Banner";
 
 function App() {
   const userLogin = useSelector((state) => state.userLogin)
@@ -41,7 +35,6 @@ function App() {
           <Courses />
         </Route>
         <Route path='/course/:slug' exact component={Course} />
-        <Route path='/tags' exact component={TagClassificationDemo} />
       </Switch>
     </Router>
   );

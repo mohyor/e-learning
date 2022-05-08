@@ -1,16 +1,17 @@
 
-import { useState, useEffect, useContext } from 'react'
-import { Avatar, Badge, Menu } from 'antd';
+import { useState, useEffect } from 'react'
+import { Avatar, Badge, Menu, Input, Space } from 'antd';
 import {AppstoreOutlined, CoffeeOutlined, LoginOutlined, LogoutOutlined, UserAddOutlined, CarryOutOutlined, TeamOutlined, UserOutlined} from '@ant-design/icons'
 import { Link, Route } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { getUserDetails, } from '../../actions/userActions'
+import { getUserDetails, logout } from '../../actions/userActions'
 
 const { Item, SubMenu, ItemGroup } = Menu
 
 const TopNav = () => {
   const { userId } = useParams()
+  const { Search } = Input;
 
   const [current, setCurrent] = useState("")
 
@@ -27,6 +28,7 @@ const TopNav = () => {
       <Item key="Dashboard" onClick={(e) => setCurrent(e.key)} icon={<AppstoreOutlined />}>
         <Link to="/"><a>Online-Uni</a></Link>
       </Item>
+      {/*<Search placeholder="input search text" allowClear style={{ width: 200 }} />*/}
       {!userInfo ? (
        <>
         <Item key="Login" onClick={(e) => setCurrent(e.key)} icon={<LoginOutlined />}>

@@ -7,13 +7,8 @@ function Footer() {
       <div className="footer__text">
         <div className="footer__left">
           <p>
-            <a href="https://www.udemy.com/udemy-business/?locale=en_US&mx_pg=home-page&path=%2F&ref=footer">
-              Udemy Business
-            </a>
-          </p>
-          <p>
             <a href="https://www.udemy.com/teaching/?ref=teach_footer">
-              Teach on Udemy
+              Teach on Online-Uni
             </a>
           </p>
           <p>
@@ -48,12 +43,6 @@ function Footer() {
           </p>
         </div>
       </div>
-      <img
-        src="https://www.udemy.com/staticx/udemy/images/v7/logo-udemy-inverted.svg"
-        alt="logo"
-        className="footer__image"
-      />
-      <p className="footer__smallText">© 2021 Udemy, Inc.</p>
     </div>
   );
 }

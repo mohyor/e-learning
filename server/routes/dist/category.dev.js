@@ -15,8 +15,9 @@ var _require = require('../middleware'),
 
 router.param('categoryId', categoryById);
 router.param('userId', userById); // Add a Category
+//router.post('/category/create/:userId',  isAuth, (req, res) => {
 
-router.post('/category/create/:userId', isAuth, function (req, res) {
+router.post('/category/create', isAuth, function (req, res) {
   var category = new Category(req.body);
   category.save(function (err, data) {
     if (err) {

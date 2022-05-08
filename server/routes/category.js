@@ -10,7 +10,8 @@ router.param('categoryId', categoryById)
 router.param('userId', userById)
 
 // Add a Category
-router.post('/category/create/:userId',  isAuth, (req, res) => {
+//router.post('/category/create/:userId',  isAuth, (req, res) => {
+router.post('/category/create',  isAuth, (req, res) => {
  const category = new Category(req.body);
  category.save((err, data) => {
   if (err) { return res.status(400).json({ error: "Failed to create category." })}

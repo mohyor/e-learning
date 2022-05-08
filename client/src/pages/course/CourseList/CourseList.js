@@ -8,6 +8,7 @@ import 'slick-carousel/slick/slick-theme.css'
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import { Row, Col, Divider } from 'antd';
+import Categories from '../../../components/nav/Categories/Categories'
 
 const Courses = () => {
   const dispatch = useDispatch()
@@ -18,21 +19,13 @@ const Courses = () => {
 
   return (
     <div className="index">
-      {/*
-      <div>  
-        <Row>
-          <Col span={24}>col</Col>
-        </Row>
-      </div>*/}
       <div class="jumbotron jumbotron-fluid bg-dark">
         <div class="container">
-          <h1 class="display-4 text-light">My learning</h1>
-          <p class="text-light">Courses</p>
+          {/*<p class="display-4 text-light">My learning</p>*/}
+          <h1 class="display-4 text-light px-2">Courses</h1>
         </div>
       </div>
-      <div className="index-header-container">
-          <div className="index-header">Courses</div>
-      </div>
+      <Categories />
       <div className="courses-box">
         <div className="carousel-rel-wrapper">
           {loading ? (<h2>Loading...</h2>) : error ? (<h3>{error}</h3>) : (

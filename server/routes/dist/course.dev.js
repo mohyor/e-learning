@@ -25,8 +25,11 @@ var User = require('../models/user');
 
 router.param('userId', userById);
 router.param("courseId", courseById); // Create Course
+//router.post('/course/:userId', isAuth, /*isInstructor,*/ async(req, res) => {
 
-router.post('/course/:userId', isAuth, isInstructor, function _callee(req, res) {
+router.post('/course', isAuth,
+/*isInstructor,*/
+function _callee(req, res) {
   var alreadyExist, course;
   return regeneratorRuntime.async(function _callee$(_context) {
     while (1) {
@@ -51,8 +54,7 @@ router.post('/course/:userId', isAuth, isInstructor, function _callee(req, res) 
         case 6:
           _context.next = 8;
           return regeneratorRuntime.awrap(new Course(_objectSpread({
-            slug: slugify(req.body.name),
-            instructor: req.profile.id
+            slug: slugify(req.body.name)
           }, req.body)).save());
 
         case 8:
@@ -169,7 +171,7 @@ router.get('/courses', function _callee4(req, res) {
       }
     }
   });
-}); // Course Enrollment
+}); // Free Course Enrollment
 
 router.put('/free-enrollment/:userId', isAuth, function _callee5(req, res) {
   var studentCourse;
@@ -189,9 +191,8 @@ router.put('/free-enrollment/:userId', isAuth, function _callee5(req, res) {
 
         case 3:
           studentCourse = _context5.sent;
-          //const studentCourse = await User.findByIdAndUpdate(req.params.userId, { $addToSet: { 'courses.$.title': req.body.courseId }, }, { new: true }).exec()
           res.json({
-            message: 'Congratulations! You have successfully enrolled',
+            message: 'Enrolled!',
             studentCourse: studentCourse
           });
           _context5.next = 11;
@@ -200,8 +201,8 @@ router.put('/free-enrollment/:userId', isAuth, function _callee5(req, res) {
         case 7:
           _context5.prev = 7;
           _context5.t0 = _context5["catch"](0);
-          console.log('free enrollment err', _context5.t0);
-          return _context5.abrupt("return", res.status(400).send('Enrollment create failed'));
+          console.log(_context5.t0);
+          return _context5.abrupt("return", res.status(400).send('Enrollment failed!'));
 
         case 11:
         case "end":
@@ -382,7 +383,24 @@ router.get('/enrolled-students/:courseId', isAuth, function _callee10(req, res) 
       }
     }
   });
-}); // Create New Review 
+});
+/*
+// Course Enrollment
+router.put('/enrollment/:userId', isAuth, async (req, res) => {
+  try {
+    const { courseId } = req.body
+    const enroll = { title: req.params.courseId }
+    const enrollingStudent = await User.findById(req.params.userId)
+
+    enrollingStudent.courses.push(enroll)
+
+    await enrollingStudent.save()
+    
+    res.json({ message: 'Enrolled!', enrollingStudent })
+  } catch(err) { console.log(err); return res.status(400).send('Enrollment failed!')}
+})
+*/
+// Create New Review 
 
 router.put('/course/:courseId/review', isAuth, function _callee11(req, res, next) {
   var _req$body, rating, comment, courseId, review, course, isReviewed, avg;
