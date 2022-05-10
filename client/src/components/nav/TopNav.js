@@ -24,11 +24,14 @@ const TopNav = () => {
   useEffect(() => { dispatch(getUserDetails(userId))}, [dispatch, userId])
 
   return (
-    <Menu mode="horizontal" selectedKeys={[current]} className='mb-2'>
+    <Menu theme='dark' mode="horizontal" selectedKeys={[current]} className='mb-2'>
       <Item key="Dashboard" onClick={(e) => setCurrent(e.key)} icon={<AppstoreOutlined />}>
         <Link to="/"><a>Online-Uni</a></Link>
       </Item>
-      {/*<Search placeholder="input search text" allowClear style={{ width: 200 }} />*/}
+       {/*<Item>
+       <Search placeholder="input search text" allowClear style={{ width: 200 }} />
+      </Item>
+      */}
       {!userInfo ? (
        <>
         <Item key="Login" onClick={(e) => setCurrent(e.key)} icon={<LoginOutlined />}>

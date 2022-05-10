@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
+import TopNav from './components/nav/TopNav'
 import Register from './pages/user/register/register'
 import Home from './pages/home/Home'
 import Login from './pages/user/login/login'
@@ -18,22 +19,29 @@ function App() {
 
   return (
     <Router>
+      <TopNav />
       <ToastContainer position="top-center" />
       <Switch>
+        // Login Page
         <Route path="/login">
           {userInfo ? <Redirect to="/" /> : <Login />}
         </Route>
+        // Home Page
         <Route exact path='/' component={Home} />
+        // Register Page
         <Route path="/register">
           {userInfo ? <Redirect to="/" /> : <Register />}{" "}
         </Route>
+        // User Profile Page
         <Route path='/user/:userId'>
           {!userInfo ? <Redirect to='/login' /> : <Profile />}
         </Route>
+        // Courses Page
         <Route path='/courses' exact>
           <Categories />
           <Courses />
         </Route>
+        // Individual Course Page
         <Route path='/course/:slug' exact component={Course} />
       </Switch>
     </Router>

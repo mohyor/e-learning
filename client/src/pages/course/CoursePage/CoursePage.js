@@ -12,6 +12,7 @@ import Message from '../../../components/general/Message'
 //import { TextareaAutosize } from '@mui/base'
 import { SyncOutlined } from "@ant-design/icons";
 import { Form, Input, Select, Button, Row, Col, Divider } from 'antd';
+import Footer from "../../home/Footer/Footer"
 
 
 const Course = ({ match }) => {
@@ -65,8 +66,8 @@ const Course = ({ match }) => {
         <div>
           <div className="heading_box">
               <div>
-                <div style={{ fontSize: "36px", lineHeight: "41px", fontFamily: "inherit", paddingBottom:"15px" }}>{course.name}</div>
-                {/*<div style={{ fontSize: "21px", lineHeight: "27px", fontFamily: "inherit", paddingBottom: "10px"}}>{course.description}</div>*/}
+                <div style={{ fontSize: "36px", lineHeight: "41px", fontFamily: "inherit", paddingBottom:"15px" }}>{course.name}</div><br />
+                <div style={{ fontSize: "21px", lineHeight: "27px", fontFamily: "inherit", paddingBottom: "10px"}}>{course.description}</div>
                 {/*
                   <div className="index-card-ratting-feed">
                     <span className="index-rating-span">{renderRating()}</span>
@@ -81,14 +82,14 @@ const Course = ({ match }) => {
               </div>
               <div className="course-feed-img-box">
                 <CourseCard course={course} />
-                <button className="back-home-button" onClick={() => history.push("/")}>Enroll!</button>  
+                {/*<button className="back-home-button" onClick={() => history.push("/")}>Enroll!</button>*/}
+                <ModalButton type="primary" onClick={() => { setIsModalVisible(true); }}>Start Learning</ModalButton>
+                <Modal title={course.name} visible={isModalVisible} width={1000} okText="Done" cancelText="Pause" onOk={() => { setIsModalVisible(false); }} onCancel={() => { setIsModalVisible(false); }}>
+                  <CourseCard course={course} />
+                </Modal>  
               </div>
           </div>
-          {/*<CourseInfo course={this.props.course}/>*/}
-          <ModalButton type="secondary" onClick={() => { setIsModalVisible(true); }}>Start Learning</ModalButton>
-          <Modal title={course.name} visible={isModalVisible} onOk={() => { setIsModalVisible(false); }} onCancel={() => { setIsModalVisible(false); }}>
-            <CourseCard course={course} />
-          </Modal>
+
           <div>
           <Row className='pl-4'>
             <Col span={12} >
@@ -134,7 +135,9 @@ const Course = ({ match }) => {
           </div>
         </div>
       }
+      <Footer />
     </div>
+    
   )
 }
 

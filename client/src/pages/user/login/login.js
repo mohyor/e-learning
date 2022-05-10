@@ -1,5 +1,5 @@
 import './login.css'
-import { CircularProgress } from '@material-ui/core'
+import { CircularProgress } from '@mui/material'
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'

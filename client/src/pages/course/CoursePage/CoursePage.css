@@ -1,8 +1,8 @@
 .heading_box {
  display: flex;
  justify-content: space-around;
- background-color: #505763;
- background: linear-gradient(#29303B,#29303B,#29303B);
+ background-color: #cacbce;
+ background: linear-gradient(#c3c5c9,#aebdd5,#a8abaf);
  padding: 50px 100px;
  color: #fff;
  min-width: 780px;

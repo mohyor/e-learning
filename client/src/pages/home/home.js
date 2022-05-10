@@ -1,7 +1,6 @@
 
 import Footer from './Footer/Footer'
 import Courses from '../course/CourseList/CourseList'
-import TopNav from '../../components/nav/TopNav'
 import Banner from "./Banner/Banner";
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -12,7 +11,6 @@ const Home = () => {
 
   return (
     <div>
-      <TopNav />
       <Banner />
       <Courses />
       <Footer />
