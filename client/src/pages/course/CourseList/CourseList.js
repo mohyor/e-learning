@@ -1,13 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import CourseCard from '../../../components/cards/CourseCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { listCourses } from '../../../actions/courseActions'
-import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
-import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
-import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
-import { Row, Col, Divider } from 'antd';
+import { Row, Col } from 'antd';
 import Categories from '../../../components/nav/Categories/Categories'
 
 const Courses = () => {
@@ -22,7 +19,7 @@ const Courses = () => {
       <div class="jumbotron jumbotron-fluid bg-dark">
         <div class="container">
           {/*<p class="display-4 text-light">My learning</p>*/}
-          <h1 class="display-4 text-light px-2">Courses</h1>
+          <h1 class="display-4 text-light pt-4 pb-4" id="courses_banner">Recommended Courses</h1>
         </div>
       </div>
       <Categories />

@@ -22,8 +22,8 @@ export default function Login({ location, history }) {
     <div className="login">
       <div className="loginWrapper">
        <div className="loginLeft">
-        <h3 className="loginLogo">Online University</h3>
-        <span className="loginDesc">Knowledge is Power!.{" "}</span>
+        <h3 className="loginLogo">Educate!</h3>
+        <span className="loginDesc px-2">"Education is the passport to the future, for tomorrow belongs to those who prepare for it today." - Malcolm X{" "}</span>
        </div>
        <div className="loginRight">
         <form div className="loginBox" onSubmit={handleClick}>
@@ -32,7 +32,7 @@ export default function Login({ location, history }) {
          <button type='submit' className="loginButton">{isFetching ? <CircularProgress color="inherit" size="20px" /> : "Log In"}</button>
          <span className="loginForgot">Forgot Password?</span>
          <button className="loginRegisterButton">
-         {isFetching ? <CircularProgress color="inherit" size="20px" /> : "Create a New Account"}
+         {isFetching ? <CircularProgress color="inherit" size="20px" /> : <Link to="/register"style={{textDecoration:"none"}}>Create a New Account</Link>}
          </button>
         </form>
        </div>

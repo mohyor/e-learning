@@ -11,7 +11,6 @@ router.param('userId', userById)
 router.param("courseId", courseById)
 
 // Create Course
-//router.post('/course/:userId', isAuth, /*isInstructor,*/ async(req, res) => {
 router.post('/course', isAuth, /*isInstructor,*/ async(req, res) => {
  try { 
   const alreadyExist = await Course.findOne({ slug: slugify(req.body.name.toLowerCase()),})

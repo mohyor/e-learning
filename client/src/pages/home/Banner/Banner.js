@@ -9,7 +9,7 @@ const banner = () => {
         alt="banner"
       />
       <div className="banner__text">
-        <h1>Welcome to Online Uni.</h1>
+        <h1>Welcome to Educate!</h1>
         <p><a href="https://blog.udemy.com/bonus-lessons/">Are you ready to learn?</a></p>
       </div>
     </div>

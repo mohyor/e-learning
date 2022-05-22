@@ -26,8 +26,8 @@ export default function Register() {
     <div className="login">
       <div className="loginWrapper">
        <div className="loginLeft">
-        <h3 className="loginLogo">Connect</h3>
-        <span className="loginDesc">Stay Connected to the world.{" "}</span>
+        <h3 className="loginLogo">Educate!</h3>
+        <span className="loginDesc px-2 pr-2"><i>Education is the passport to the future, for tomorrow belongs to those who prepare for it today." - Malcolm X{" "}</i></span>
        </div>
        <div className="loginRight">
         <form className="loginBox" onClick={handleClick}>

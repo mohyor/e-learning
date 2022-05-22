@@ -8,3 +8,7 @@
 transition: transform 0.7s;
 transition-timing-function: cubic-bezier(1, 0.3, 0.45, 0.85);
 }
+
+#courses_banner {
+ font-family: "Times New Roman", Times, serif;
+}
