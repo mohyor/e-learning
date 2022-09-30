@@ -15,7 +15,7 @@ const morgan = require('morgan'),
  port = process.env.PORT || 4000,
  csrfProtection = csrf({ cookie: true })
 
-mongoose.connect("mongodb://localhost:27017/finalyrproj", { useNewUrlParser: true, useUnifiedTopology: true, })
+mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true, })
  .then(() => console.log('DB CONNECTED'))
  .catch((err) => console.log("DB CONNECTION ERR =>", err))
 
