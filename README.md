@@ -1,2 +1,2 @@
 # e-learning
- Online learning platform built with the MERN stack.
+ Online learning platform built with the MongoDB, Express.js, React, Keras and Tensor-flow.
